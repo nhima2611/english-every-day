@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>English mỗi ngày — Nói câu đúng, nói điều mình muốn</title>
+    <title>English mỗi ngày · Tuần 16–30</title>
     <style>
         :root {
             --ink: #1d2b34;
@@ -13,8 +13,7 @@
             --card: #fff;
             --green: #167a64;
             --lime: #d9f28a;
-            --line: #e2e9e3;
-            --orange: #f0a36d
+            --line: #e2e9e3
         }
 
         * {
@@ -25,137 +24,154 @@
             margin: 0;
             background: var(--paper);
             color: var(--ink);
-            font: 16px/1.55 Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif
+            font: 16px/1.55 system-ui, -apple-system, "Segoe UI", sans-serif
         }
 
         main {
-            max-width: 1050px;
+            max-width: 1100px;
             margin: auto;
-            padding: 30px 22px 60px
+            padding: 28px 20px 60px
         }
 
         .top {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            gap: 16px
+            gap: 12px
         }
 
         .brand {
-            font-size: 13px;
-            font-weight: 800;
+            font-size: 12px;
             letter-spacing: .1em;
             color: var(--green);
+            font-weight: 800;
             text-transform: uppercase
         }
 
-        .streak {
+        .progress {
             border: 1px solid var(--line);
-            border-radius: 999px;
-            padding: 8px 14px;
-            background: white;
+            background: #fff;
+            padding: 7px 13px;
+            border-radius: 99px;
             font-size: 13px
         }
 
         h1 {
-            font-size: clamp(34px, 6vw, 60px);
-            line-height: 1.02;
-            letter-spacing: -.05em;
-            max-width: 720px;
-            margin: 38px 0 14px
+            font-size: clamp(32px, 6vw, 55px);
+            line-height: 1.03;
+            letter-spacing: -.045em;
+            margin: 32px 0 12px
         }
 
         .sub {
             color: var(--muted);
-            max-width: 620px;
-            margin: 0 0 28px
+            max-width: 700px;
+            margin: 0 0 20px
         }
 
-        .layout {
-            display: grid;
-            grid-template-columns: 290px 1fr;
-            gap: 20px
-        }
-
-        .panel,
-        .lesson {
-            background: var(--card);
-            border: 1px solid var(--line);
-            border-radius: 20px;
-            box-shadow: 0 8px 30px #23443208
-        }
-
-        .panel {
-            padding: 18px;
-            align-self: start
-        }
-
-        .progress-label {
+        .audio {
             display: flex;
-            justify-content: space-between;
+            gap: 12px;
+            align-items: center;
+            flex-wrap: wrap;
+            padding: 14px 16px;
+            background: #eaf3ed;
+            border-radius: 16px;
+            margin: 16px 0 22px
+        }
+
+        .audio label {
             font-size: 13px;
             font-weight: 700
         }
 
+        .audio select {
+            max-width: 240px
+        }
+
+        .audio input {
+            vertical-align: middle
+        }
+
+        .layout {
+            display: grid;
+            grid-template-columns: 260px 1fr;
+            gap: 18px
+        }
+
+        .panel,
+        .lesson {
+            border: 1px solid var(--line);
+            background: var(--card);
+            border-radius: 18px;
+            box-shadow: 0 8px 30px #23443208
+        }
+
+        .panel {
+            padding: 16px;
+            align-self: start
+        }
+
+        .phead {
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 750
+        }
+
         .bar {
-            height: 8px;
-            border-radius: 9px;
+            height: 7px;
             background: #edf1ec;
-            margin: 10px 0 18px;
+            border-radius: 8px;
+            margin: 9px 0 14px;
             overflow: hidden
         }
 
         .bar i {
             display: block;
             height: 100%;
-            width: 0;
             background: var(--green);
-            border-radius: 9px;
-            transition: width .25s
+            width: 0
         }
 
-        .daylist {
+        .days {
             display: grid;
-            gap: 6px;
-            max-height: 62vh;
+            gap: 5px;
+            max-height: 65vh;
             overflow: auto
         }
 
         .day {
-            width: 100%;
-            text-align: left;
             border: 0;
-            background: transparent;
-            padding: 10px;
-            border-radius: 12px;
+            background: none;
+            text-align: left;
+            padding: 9px;
+            border-radius: 10px;
             cursor: pointer;
             color: var(--ink);
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: center
         }
 
-        .day:hover,
-        .day.active {
+        .day.active,
+        .day:hover {
             background: #eff6ef
         }
 
-        .dot {
-            width: 25px;
-            height: 25px;
-            flex: none;
-            display: grid;
-            place-items: center;
-            border-radius: 50%;
-            background: #eff2ee;
-            color: var(--muted);
-            font-size: 12px;
-            font-weight: 700
+        .day.done .num {
+            background: var(--lime)
         }
 
-        .day.done .dot {
-            background: var(--lime);
-            color: #315025
+        .num {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: #edf1ec;
+            display: grid;
+            place-items: center;
+            font-size: 11px;
+            flex: none
         }
 
         .day small {
@@ -165,177 +181,148 @@
         }
 
         .lesson {
-            padding: clamp(20px, 4vw, 38px)
+            padding: clamp(18px, 4vw, 36px)
         }
 
         .eyebrow {
+            font-size: 12px;
             color: var(--green);
             font-weight: 800;
             text-transform: uppercase;
-            font-size: 12px;
-            letter-spacing: .09em
+            letter-spacing: .08em
         }
 
         .lesson h2 {
-            font-size: clamp(26px, 4vw, 38px);
+            font-size: clamp(25px, 4vw, 37px);
             line-height: 1.12;
-            letter-spacing: -.035em;
-            margin: 8px 0
+            letter-spacing: -.03em;
+            margin: 6px 0
         }
 
         .goal {
             color: var(--muted);
-            margin: 0 0 24px
+            margin: 0 0 18px
         }
 
         .block {
             border-top: 1px solid var(--line);
-            padding: 20px 0
+            padding: 18px 0
         }
 
         .block h3 {
-            font-size: 14px;
+            font-size: 13px;
             text-transform: uppercase;
             letter-spacing: .06em;
-            margin: 0 0 12px;
-            color: #43555c
+            color: #43555c;
+            margin: 0 0 10px
         }
 
-        .example {
+        .row {
             display: flex;
             justify-content: space-between;
             align-items: flex-start;
-            gap: 14px;
-            padding: 13px 15px;
-            margin: 8px 0;
+            gap: 12px;
+            padding: 11px 13px;
+            margin: 7px 0;
             background: #f6f8f5;
-            border-radius: 12px
+            border-radius: 11px
         }
 
-        .example strong {
+        .row strong {
             display: block
         }
 
-        .example span {
+        .row span {
+            display: block;
             color: var(--muted);
             font-size: 14px
         }
 
-        .tag {
-            font-size: 11px;
+        .speak,
+        .btn {
+            border: 1px solid var(--line);
+            background: #fff;
             color: var(--green);
-            background: #e5f3ed;
             border-radius: 99px;
-            padding: 3px 8px;
+            padding: 6px 11px;
+            font: inherit;
+            font-size: 13px;
+            font-weight: 700;
+            cursor: pointer;
             white-space: nowrap
+        }
+
+        .speak:hover,
+        .btn:hover {
+            background: #eaf5ee
+        }
+
+        .formula {
+            display: block;
+            margin-top: 4px;
+            padding: 7px 10px;
+            border-left: 3px solid var(--lime);
+            color: #34584e;
+            background: #f4f8f0;
+            font-size: 14px
         }
 
         .prompt {
             background: #fff8ef;
-            border: 1px solid #f5e6d6;
-            border-radius: 14px;
+            border: 1px solid #f3e4d2;
+            border-radius: 13px;
+            padding: 15px
+        }
+
+        .reading {
+            font-size: 17px;
+            line-height: 1.8;
+            background: #f6f8f5;
             padding: 16px;
-            margin: 8px 0
-        }
-
-        .prompt p {
-            margin: 0 0 8px
-        }
-
-        .hint {
-            border: 0;
-            background: transparent;
-            color: var(--green);
-            font-weight: 700;
-            cursor: pointer;
-            padding: 4px 0
-        }
-
-        .answer {
-            display: none;
-            color: #38534b;
-            margin-top: 8px
-        }
-
-        .answer.show {
-            display: block
-        }
-
-        .write {
-            width: 100%;
-            min-height: 90px;
-            border: 1px solid var(--line);
-            border-radius: 12px;
-            padding: 12px;
-            font: inherit;
-            resize: vertical
+            border-radius: 13px
         }
 
         .tools {
             display: flex;
-            gap: 10px;
+            gap: 9px;
             flex-wrap: wrap;
             margin-top: 12px
         }
 
-        .button {
-            border: 0;
-            border-radius: 999px;
-            padding: 11px 18px;
+        .primary {
             background: var(--green);
             color: white;
-            font: inherit;
-            font-weight: 750;
-            cursor: pointer
+            border: 0;
+            padding: 10px 15px
         }
 
-        .button.secondary {
-            background: white;
-            color: var(--ink);
-            border: 1px solid var(--line)
-        }
-
-        .button:disabled {
-            opacity: .45;
-            cursor: default
+        .primary.done {
+            background: #567f47
         }
 
         .nav {
             display: flex;
             justify-content: space-between;
-            margin-top: 26px
+            margin-top: 22px
         }
 
         .note {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--muted)
         }
 
-        footer {
-            margin-top: 22px;
-            color: var(--muted);
-            font-size: 12px
-        }
-
-        .speak {
+        select {
             border: 1px solid var(--line);
-            background: #fff;
-            color: var(--green);
-            border-radius: 999px;
-            padding: 5px 10px;
-            font: inherit;
-            font-size: 13px;
-            font-weight: 700;
-            cursor: pointer;
-            white-space: nowrap
+            border-radius: 8px;
+            padding: 6px;
+            background: white;
+            font: inherit
         }
 
-        .speak:hover {
-            background: #eaf5ee
-        }
-
-        .prompt-audio {
-            margin: 2px 0 10px
+        footer {
+            font-size: 12px;
+            color: var(--muted);
+            margin-top: 20px
         }
 
         @media(max-width:760px) {
@@ -343,25 +330,21 @@
                 grid-template-columns: 1fr
             }
 
-            .panel {
-                order: 2
+            .days {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                max-height: 280px
             }
 
-            .daylist {
-                grid-template-columns: repeat(2, minmax(0, 1fr));
-                max-height: 300px
+            .panel {
+                order: 2
             }
 
             .lesson {
                 order: 1
             }
 
-            .top {
-                align-items: flex-start
-            }
-
-            .streak {
-                white-space: nowrap
+            .row {
+                gap: 7px
             }
         }
     </style>
@@ -371,130 +354,64 @@
     <main>
         <div class="top">
             <div class="brand">English, one day at a time</div>
-            <div class="streak" id="streak">0 / 62 ngày hoàn thành</div>
+            <div class="progress" id="progress">0 / 105 ngày</div>
         </div>
-        <h1>Nói điều mình muốn.<br>Thành câu rõ ràng.</h1>
-        <p class="sub">Mỗi ngày 15–20 phút. Học 5 từ mới, một cụm động từ đi với giới từ, luyện mẫu câu rồi tự trả lời
-            một câu hỏi. Bài học được lưu trên thiết bị này.</p>
+        <h1>Tiếp tục từ tuần 16.<br>Nói rõ hơn mỗi ngày.</h1>
+        <p class="sub">Lộ trình mới kéo dài 15 tuần, từ tuần 16 đến 30. Mỗi bài có 5 từ theo chủ đề, nhóm cụm từ cùng
+            động từ, câu mẫu có công thức, câu hỏi luyện nói và đoạn đọc cuối bài.</p>
+        <div class="audio"><label>Giọng đọc <select id="voice">
+                    <option>Đang tìm giọng tiếng Anh…</option>
+                </select></label><label>Tốc độ <input id="rate" type="range" min=".65" max="1.1" step=".05" value=".82">
+                <span id="rateLabel">0.82×</span></label><button class="speak" id="preview">▶ Nghe thử
+                giọng</button><span class="note">Danh sách giọng tùy theo trình duyệt và thiết bị.</span></div>
         <div class="layout">
             <aside class="panel">
-                <div class="progress-label"><span>Lộ trình 9 tuần</span><span id="pct">0%</span></div>
+                <div class="phead"><span>Tuần 16–30</span><span id="percent">0%</span></div>
                 <div class="bar"><i id="fill"></i></div>
-                <div class="daylist" id="daylist"></div>
-                <p class="note">Chọn một ngày để bắt đầu hoặc ôn lại.</p>
+                <div class="days" id="days"></div>
             </aside>
             <section class="lesson" id="lesson"></section>
         </div>
-        <footer>Gợi ý: nói thành tiếng trước, sau đó mới xem gợi ý. Sai một chút cũng được — hãy thử diễn đạt lại bằng
-            câu ngắn hơn.</footer>
+        <footer>Nghe câu mẫu rồi đọc theo. Với 5 từ, hãy thử tự đặt ít nhất một câu. Giọng đọc dùng voice tiếng Anh có
+            sẵn trên thiết bị.</footer>
     </main>
     <script>
-        const lessons = [
-            ["Giới thiệu bản thân", "Dùng be và danh từ để nói mình là ai.", "I am a software engineer.", "I have five years of experience.", "I am from Can Tho.", "Tell me about yourself.", "I am a front-end developer. I have five years of experience. I live in Can Tho."],
-            ["Gia đình và nơi ở", "Dùng have, live with để nói về gia đình.", "There are four people in my family.", "I live with my parents.", "I have a cat named Mimi.", "Who do you live with?", "I live with my parents in Can Tho. I have a cat named Mimi."],
-            ["Thói quen buổi sáng", "Hiện tại đơn nói về thói quen.", "I wake up at six.", "I usually exercise in the morning.", "I have breakfast at seven.", "What do you usually do in the morning?", "I wake up at six and exercise. Then I have breakfast at seven."],
-            ["Đi làm", "Dùng go to work và takes me để kể việc đi làm.", "I go to work by motorbike.", "It takes me 45 minutes.", "I arrive at work at eight.", "How do you get to work?", "I go to work by motorbike. It takes me about 45 minutes."],
-            ["Công việc của tôi", "Dùng work on để nói mình đang phụ trách gì.", "I work on front-end features.", "I use React and Node.js.", "I work with a team of eight.", "What do you do at work?", "I work on front-end features using React. I work with a team of eight."],
-            ["Buổi tối", "Dùng then để kể các hoạt động theo thứ tự.", "I cook dinner when I get home.", "Then I study English.", "I go to bed at eleven.", "What do you do after work?", "I cook dinner when I get home. Then I study English for an hour."],
-            ["Ôn tuần 1", "Ghép câu giới thiệu, công việc và thói quen.", "I live with my parents.", "I work as a front-end developer.", "I study English every day.", "Introduce yourself in three sentences.", "I live with my parents in Can Tho. I work as a front-end developer. I study English every day."],
-            ["Câu hỏi với be", "Đảo be lên trước chủ ngữ để hỏi.", "Are you busy today?", "Is your team large?", "Where are you from?", "Ask someone where they are from.", "Where are you from? Are you busy today?"],
-            ["Do / Does", "Dùng do/does để hỏi về thói quen.", "Do you work from home?", "Does your team use React?", "I don't work on Sundays.", "Do you drink coffee in the morning?", "I usually drink coffee in the morning. / I don't drink coffee."],
-            ["Thường xuyên như thế nào", "Trạng từ tần suất thường đứng trước động từ thường.", "I usually check my email first.", "I often review my teammate's code.", "I sometimes work from home.", "How often do you have meetings?", "I have a meeting every morning. I usually review code in the afternoon."],
-            ["Nói về sở thích", "Dùng like/enjoy + danh từ hoặc V-ing.", "I enjoy learning English.", "I like solving problems.", "I don't enjoy speaking in large groups.", "What do you enjoy doing?", "I enjoy learning new things and solving problems at work."],
-            ["Hỏi để làm rõ", "Dùng các câu hỏi ngắn khi chưa hiểu.", "Could you repeat that, please?", "What does this word mean?", "Could you speak more slowly?", "What can you say when you don't understand?", "Could you repeat that, please? Could you speak more slowly?"],
-            ["Daily routine", "Ôn hiện tại đơn và trạng từ tần suất.", "I usually start work at eight.", "I take a short lunch break.", "I finish work at five.", "Describe a typical workday.", "I start work at eight. I take a short lunch break and finish at five."],
-            ["Ôn tuần 2", "Hỏi và trả lời về thói quen.", "Do you exercise every day?", "I sometimes visit my parents on weekends.", "My sister works in a bank.", "Ask two questions about someone's routine.", "Do you work from home? What do you usually do after work?"],
-            ["Đang diễn ra", "Hiện tại tiếp diễn: am/is/are + V-ing.", "I am fixing a bug now.", "We are testing a new feature.", "The team is discussing the API.", "What are you working on right now?", "I am working on a new feature. I am checking the API response."],
-            ["Thường làm hay đang làm?", "Hiện tại đơn = thói quen; tiếp diễn = lúc này.", "I work with React every day.", "I am using a new library this week.", "She usually works at home.", "What are you doing today?", "I usually work on front-end features. Today, I am fixing a bug."],
-            ["Hành động đang xảy ra", "Dùng V-ing cho việc đang diễn ra.", "The app is loading.", "I am talking to the backend team.", "We are looking into the issue.", "What is your team doing now?", "We are testing the fix. I am checking whether the issue is resolved."],
-            ["Nói về cảm xúc", "Feel + tính từ; trạng từ không thay tính từ ở đây.", "I feel tired after work.", "I am excited about the new project.", "This task looks difficult.", "How do you feel about your current project?", "I feel excited because I am learning something new."],
-            ["Việc cần làm", "Dùng need to + động từ nguyên mẫu.", "I need to check the logs.", "We need to update the component.", "I need to ask the designer.", "What do you need to do today?", "I need to finish a feature and check it on mobile."],
-            ["Mô tả cách làm", "Trạng từ bổ nghĩa động từ, thường cho biết làm thế nào.", "I speak slowly.", "She explains the issue clearly.", "We tested the change carefully.", "How do you review your code?", "I review my code carefully and test the main cases."],
-            ["Kế hoạch trong ngày", "Kết hợp việc đang làm với việc tiếp theo.", "I am finishing this task.", "After that, I will review the pull request.", "I am waiting for the API response.", "What are you doing after this lesson?", "I am finishing my task. After that, I will review the pull request."],
-            ["Ôn tuần 3", "Nói việc thường ngày và việc đang diễn ra.", "I usually check email in the morning.", "I am working on a feature right now.", "The team is testing the release.", "What are you working on this week?", "I am working on an e-signature feature. We are testing it this week."],
-            ["Quá khứ với be", "Was/were là quá khứ của am/is/are.", "I was busy yesterday.", "The meeting was useful.", "We were at the office.", "How was your day yesterday?", "I was busy yesterday, but the meeting was useful."],
-            ["Quá khứ đơn", "Dùng động từ quá khứ cho việc đã hoàn tất.", "I fixed a bug yesterday.", "We released the feature last week.", "I went to work by motorbike.", "What did you do yesterday?", "I fixed a bug and reviewed a pull request yesterday."],
-            ["Câu hỏi quá khứ", "Did + chủ ngữ + động từ nguyên mẫu.", "Did you finish the task?", "What did the client say?", "I didn't attend the meeting.", "What did you work on yesterday?", "I worked on a bug. I also discussed the API with the backend team."],
-            ["Kể theo trình tự", "Dùng first, then, after that, finally.", "First, I checked the issue.", "Then, I reproduced the bug.", "Finally, I submitted a fix.", "Tell me how you fixed a bug.", "First, I reproduced the bug. Then I checked the API response and fixed it."],
-            ["Vấn đề và lý do", "Dùng because để nói nguyên nhân.", "The page was slow because the request took too long.", "I asked for help because I was blocked.", "The test failed because the data was incorrect.", "Why was the task difficult?", "It was difficult because the API returned unexpected data."],
-            ["Kết quả", "Dùng so để nói kết quả.", "The build failed, so I checked the logs.", "I finished early, so I went for a walk.", "We found the issue, so we fixed it.", "What happened after you found the bug?", "We found the cause, so I fixed the code and tested it again."],
-            ["Báo cáo hôm qua", "Past simple cho daily report về việc đã làm.", "Yesterday, I finished the form.", "I fixed two bugs.", "I couldn't finish the last task.", "Give a short update about yesterday.", "Yesterday, I finished the form and fixed two bugs. I couldn't finish the last task."],
-            ["Ôn tuần 4", "Kể việc đã làm và giải thích.", "I joined a meeting yesterday.", "We discussed the new flow.", "I sent the update to my manager.", "What did you accomplish this week?", "I fixed several bugs and finished a feature. I also helped test the release."],
-            ["Dự định", "Will + động từ nguyên mẫu để nói tương lai.", "I will test the fix tomorrow.", "We will discuss the design later.", "I will send you an update.", "What will you do tomorrow?", "I will finish the feature and ask the QA team to test it."],
-            ["Kế hoạch đã định", "Be going to + động từ nguyên mẫu.", "I am going to study tonight.", "We are going to release next week.", "I am going to call my parents.", "What are you going to do this weekend?", "I am going to visit my parents this weekend."],
-            ["Khả năng và đề nghị", "Can + động từ nguyên mẫu.", "I can help with the test.", "Can you check this file?", "We can try another approach.", "How can you offer to help a teammate?", "I can help test the feature. / Can I help you with that?"],
-            ["Lời khuyên", "Should + động từ nguyên mẫu.", "We should check the mobile layout.", "You should add an error message.", "I should practice speaking more.", "What should your team do before release?", "We should test the main flows before we release."],
-            ["Muốn và cần", "Want/need + to + động từ.", "I want to improve my English.", "I need to finish this task.", "I want to become a better developer.", "What do you want to improve?", "I want to speak more confidently, so I practice every day."],
-            ["Động từ theo sau bởi V-ing", "Enjoy/finish/avoid thường đi với V-ing.", "I enjoy learning new things.", "I finished writing the component.", "I avoid checking my phone at work.", "What do you enjoy doing after work?", "I enjoy exercising in the morning and learning English in the evening."],
-            ["So sánh kế hoạch", "Nói điều kiện thật có thể xảy ra bằng if.", "If I have time, I will review the code.", "If it rains, I will stay home.", "If the API is ready, we can test it.", "What will you do if you finish early?", "If I finish early, I will study English or go for a walk."],
-            ["Ôn tuần 5", "Nói kế hoạch, khả năng và lời khuyên.", "I will practice tonight.", "I can explain the issue.", "We should test the edge cases.", "What are your plans for this week?", "I am going to finish my feature. I will ask for feedback when it is ready."],
-            ["Nối ý bằng and / but", "Dùng and thêm ý, but nêu ý trái ngược.", "I write code and review pull requests.", "The task was hard, but I finished it.", "I was tired, but I studied English.", "What is challenging about speaking English?", "Speaking is challenging, but I practice a little every day."],
-            ["Lý do với because", "Because nối nguyên nhân với kết quả.", "I study English because I need it for work.", "I asked again because I didn't understand.", "We delayed the release because we found a bug.", "Why are you learning English?", "I am learning English because I want to communicate confidently at work."],
-            ["Thời gian với when", "When + mệnh đề cho biết lúc nào.", "I listen to English when I commute.", "When I get home, I cook dinner.", "I ask questions when I am unsure.", "When do you usually study?", "I study English after dinner. I also listen when I commute."],
-            ["Nói về trải nghiệm", "Have + danh từ hoặc hiện tại hoàn thành cơ bản.", "I have worked at three companies.", "I have used React for several years.", "I have learned a lot from my team.", "What have you learned at work?", "I have learned how to build features and work with different teams."],
-            ["Nêu ý kiến đơn giản", "I think / I feel / In my opinion + câu.", "I think this solution is simpler.", "I feel this design is easier to use.", "In my opinion, we need more time.", "What do you think about this solution?", "I think this solution is clear, but we should test it first."],
-            ["Nhờ giúp đỡ", "Dùng câu lịch sự với could/can.", "Could you give me a hand?", "Could you explain this part?", "Can you review my pull request?", "Ask a teammate to review your code.", "Could you review my pull request when you have time?"],
-            ["Chưa chắc chắn", "Dùng I’m not sure, maybe, probably.", "I'm not sure how this works.", "Maybe we can check the documentation.", "It probably needs another test.", "What can you say when you are unsure?", "I am not sure, but I think the issue is related to the API."],
-            ["Ôn tuần 6", "Nối ý và diễn đạt quan điểm.", "I like this solution because it is simple.", "I agree, but I have one question.", "When I have time, I practice speaking.", "Explain why you chose a solution.", "I chose this approach because it is easy to maintain and test."],
-            ["Daily stand-up", "Mẫu báo cáo: hôm qua, hôm nay, trở ngại.", "Yesterday, I fixed a validation bug.", "Today, I am working on the upload flow.", "I am blocked by an API issue.", "Give a stand-up update in three sentences.", "Yesterday, I fixed a bug. Today, I am working on the upload flow. I am waiting for the API update."],
-            ["Giải thích lỗi", "Nói triệu chứng, nguyên nhân, việc đang làm.", "The page doesn't load on mobile.", "The issue happens when the token expires.", "I am checking the network request.", "Explain a bug you recently fixed.", "The page didn't load because the request failed. I fixed the error handling and tested it again."],
-            ["Trao đổi API", "Dùng ask, agree on, send, return.", "I will ask the backend team about the response.", "The API returns an empty list.", "Can we agree on the field names?", "Ask a backend teammate to clarify a response.", "Could you clarify the API response? The field is empty when there are no results."],
-            ["Trao đổi trong cuộc họp", "Dùng phrases ngắn để tham gia tự nhiên.", "Could you explain the goal?", "I have a question about the timeline.", "That makes sense to me.", "Ask one question about a project timeline.", "Could you explain the timeline? I want to understand when testing will start."],
-            ["Nhận và đưa cập nhật", "Dùng status, finish, in progress, ready.", "The task is in progress.", "I have finished the first part.", "The fix is ready for review.", "Give an update about your current task.", "The form is in progress. I have finished the layout, and the validation is ready for review."],
-            ["Giao tiếp khi bị chặn", "Nêu việc đã thử và điều cần hỗ trợ.", "I tried restarting the app.", "The problem is still there.", "Could someone help me check the config?", "Explain that you are blocked.", "I checked the configuration, but the issue is still there. Could you help me investigate?"],
-            ["Cuối tuần và cuộc sống", "Kết hợp thói quen với sở thích.", "I visit my parents on weekends.", "I go for a walk when the weather is nice.", "I relax at home on Sundays.", "What do you usually do on weekends?", "I usually visit my parents in Can Tho and relax with my family."],
-            ["Ôn tuần 7", "Nói cập nhật công việc trong một phút.", "Yesterday, I completed the main flow.", "Today, I am testing the error cases.", "I need help with one API response.", "Give a one-minute work update.", "Yesterday, I completed the main flow. Today, I am testing the error cases. I need help with one API response."],
-            ["Mock interview: giới thiệu", "Trả lời ngắn rồi thêm một chi tiết cụ thể.", "I am a front-end developer.", "I have five years of experience.", "I mainly use React and Node.js.", "Tell me about yourself.", "I am a front-end developer with five years of experience. I mainly use React and Node.js."],
-            ["Mock interview: dự án", "Dùng worked on, responsible for, helped build.", "I worked on an e-signature project.", "I built reusable form components.", "I worked closely with designers and backend engineers.", "Tell me about a project you worked on.", "I worked on an e-signature project. I built front-end features and worked with backend engineers."],
-            ["Mock interview: thử thách", "Dùng challenge + cách xử lý + kết quả.", "One challenge was integrating with a local service.", "I investigated the connection issue.", "I discussed the solution with my team.", "Describe a challenge at work.", "One challenge was connecting the website to a local service. I investigated the issue and worked with my team on a solution."],
-            ["Mock interview: điểm mạnh", "Nêu điểm mạnh kèm ví dụ.", "I am careful with details.", "I communicate well with my team.", "I learn new tools quickly.", "What is one of your strengths?", "I learn new tools quickly. For example, I have learned new libraries while working on projects."],
-            ["Mock interview: mục tiêu", "Dùng want to / plan to cho mục tiêu.", "I want to improve my English.", "I plan to take on more responsibility.", "I want to become a stronger developer.", "What is your career goal?", "I want to become a stronger developer and communicate more confidently in English."],
-            ["Kể chuyện ngắn", "Nối quá khứ, cảm xúc và kết quả.", "Last week, I had a difficult bug.", "I felt stuck, so I asked for help.", "We fixed it before the release.", "Tell me about a problem you solved.", "Last week, I found a difficult bug. I asked a teammate for help, and we fixed it before the release."],
-            ["Hội thoại tự nhiên", "Thêm câu hỏi tiếp nối để giữ cuộc nói chuyện.", "That sounds interesting. What happened next?", "How did you solve it?", "Could you tell me more?", "Continue a conversation about someone's work.", "That sounds interesting. What was the hardest part, and how did you solve it?"],
-            ["Tổng ôn và tự đánh giá", "Nói 1–2 phút, dùng câu đơn và nối ý.", "I can describe my work clearly.", "I can ask someone to repeat.", "I can explain a simple problem.", "Speak for one minute about your work and goals.", "I am a front-end developer. I work with React and Node.js. I want to improve my English because I need it at work. I practice every day."]
+        const units = [
+            {
+                v: "GET", title: "Thói quen, thích nghi và giao tiếp", grammar: "Cụm GET thay đổi nghĩa theo tiểu từ hoặc giới từ; học cả cụm như một đơn vị.", words: "routine=thói quen;alarm=chuông báo thức;commute=đi làm hằng ngày;colleague=đồng nghiệp;adjust=thích nghi;habit=thói quen;deadline=hạn chót;progress=tiến độ;obstacle=trở ngại;recover=hồi phục;contact=liên hệ;message=tin nhắn;comfortable=thoải mái;confident=tự tin;opportunity=cơ hội".split(";"), phrases: [
+                    ["get up", "thức dậy", "I get up at six on workdays.", "S + get up + thời gian."], ["get ready", "chuẩn bị sẵn sàng", "I get ready before I leave home.", "S + get ready + before + clause / for + N."], ["get to work", "đến chỗ làm", "I get to work by motorbike.", "S + get to + địa điểm."], ["get along with", "hòa thuận với", "I get along with my teammates.", "S + get along with + người."], ["get over", "vượt qua", "I got over my fear of speaking.", "S + get over + N."], ["get back to", "quay lại với", "I will get back to this task after lunch.", "S + get back to + N."], ["get used to", "dần quen với", "I am getting used to speaking English.", "S + get used to + N/V-ing."]], topics: ["Morning routine", "Getting ready for work", "Arriving at work", "Team relationships", "Overcoming a challenge", "Returning to a task", "Building a new habit"], sentences: ["I get up at six on workdays.", "I get ready before I leave home.", "I get to work by motorbike.", "I get along with my teammates.", "I got over my fear of speaking.", "I will get back to this task after lunch.", "I am getting used to speaking English."], forms: ["S + get up + time.", "S + get ready + before + clause / for + N.", "S + get to + place.", "S + get along with + person.", "S + get over + noun.", "S + get back to + noun.", "S + get used to + noun/V-ing."], prompts: ["What time do you get up?", "How do you get ready for work?", "How do you get to work?", "Who do you get along with at work?", "What challenge did you get over?", "What task will you get back to today?", "What are you getting used to?"]
+            },
+            { v: "TAKE", title: "Thói quen, trách nhiệm và thay đổi", grammar: "TAKE + tiểu từ/giới từ tạo thành cụm có nghĩa riêng.", words: "responsibility=trách nhiệm;break=giờ nghỉ;note=ghi chú;advantage=lợi thế;role=vai trò;part=phần;trash=rác;course=khóa học;hobby=sở thích;over=quyền tiếp quản;account=sự cân nhắc;time=thời gian;medicine=thuốc;photo=ảnh;effect=tác dụng".split(";"), phrases: [["take up", "bắt đầu sở thích", "I took up running last year.", "S + take up + N/V-ing."], ["take out", "mang ra / đổ", "I take out the trash every evening.", "S + take out + object."], ["take part in", "tham gia", "I take part in the daily meeting.", "S + take part in + N."], ["take care of", "chăm lo / xử lý", "I take care of the release checklist.", "S + take care of + N."], ["take on", "nhận thêm", "I can take on another task.", "S + take on + N."], ["take over", "tiếp quản", "She will take over the project.", "S + take over + N."], ["take into account", "tính đến", "We should take the deadline into account.", "S + take N into account."]], topics: ["Starting a hobby", "Daily chores", "Joining a meeting", "Taking care of a task", "Accepting responsibility", "Handing over a project", "Making a decision"], sentences: ["I took up running last year.", "I take out the trash every evening.", "I take part in the daily meeting.", "I take care of the release checklist.", "I can take on another task.", "She will take over the project.", "We should take the deadline into account."], forms: ["S + take up + N/V-ing.", "S + take out + object.", "S + take part in + N.", "S + take care of + N.", "S + take on + N.", "S + take over + N.", "S + take N into account."], prompts: ["What hobby would you like to take up?", "What do you take out at home?", "Which meetings do you take part in?", "What task do you take care of?", "Would you take on an extra task?", "Have you ever taken over a project?", "What should you take into account before a release?"] },
+            { v: "MAKE / DO", title: "Công việc, quyết định và kết quả", grammar: "MAKE thường tạo/tạo ra kết quả; DO thường nói về công việc hoặc hoạt động.", words: "decision=quyết định;mistake=lỗi;progress=tiến bộ;research=nghiên cứu;effort=nỗ lực;change=thay đổi;choice=lựa chọn;plan=kế hoạch;task=nhiệm vụ;exercise=bài tập;best=tốt nhất;promise=lời hứa;noise=tiếng ồn;difference=sự khác biệt;business=công việc".split(";"), phrases: [["make a decision", "đưa ra quyết định", "We need to make a decision today.", "S + make a decision + time."], ["make progress", "tiến bộ", "I am making progress in English.", "S + make progress + in + N."], ["make sure", "đảm bảo", "Please make sure the form is complete.", "S + make sure + clause."], ["make up for", "bù đắp", "I stayed late to make up for the delay.", "S + make up for + N."], ["do research", "nghiên cứu", "We need to do more research first.", "S + do research + (on N)."], ["do your best", "cố hết sức", "I will do my best in the interview.", "S + do one's best + in/at + N."], ["do without", "xoay xở khi thiếu", "We can do without this feature for now.", "S + do without + N."]], topics: ["Making a decision", "Tracking progress", "Checking quality", "Recovering from delays", "Researching an issue", "Preparing for an interview", "Prioritizing features"], sentences: ["We need to make a decision today.", "I am making progress in English.", "Please make sure the form is complete.", "I stayed late to make up for the delay.", "We need to do more research first.", "I will do my best in the interview.", "We can do without this feature for now."], forms: ["S + make a decision + time.", "S + make progress + in + N.", "S + make sure + clause.", "S + make up for + N.", "S + do research + on + N.", "S + do one's best + in/at + N.", "S + do without + N."], prompts: ["How do you make a decision at work?", "How are you making progress in English?", "What do you make sure to check before release?", "How can a team make up for a delay?", "What do you need to do research on?", "How will you do your best in a difficult task?", "Which feature can you do without?"] },
+            { v: "GO", title: "Quy trình, kế hoạch và tiến độ", grammar: "GO + giới từ/tiểu từ diễn tả chuyển động, tiếp tục hoặc rà soát.", words: "process=quy trình;step=bước;plan=kế hoạch;ahead=phía trước;back=trở lại;through=xuyên qua;over=xem lại;on=tiếp tục;approval=phê duyệt;checklist=danh sách kiểm tra;forward=tiến lên;live=đưa vào hoạt động;offline=ngoại tuyến;slowly=chậm;smoothly=suôn sẻ".split(";"), phrases: [["go over", "xem lại", "Let's go over the requirements.", "S + go over + N."], ["go through", "đi qua / xem kỹ", "I went through the logs.", "S + go through + N."], ["go ahead with", "tiến hành", "We can go ahead with the release.", "S + go ahead with + N."], ["go back to", "quay lại", "I went back to the original design.", "S + go back to + N."], ["go on with", "tiếp tục", "Let's go on with the next item.", "S + go on with + N."], ["go live", "đưa vào hoạt động", "The new page will go live tomorrow.", "S + go live + time."], ["go smoothly", "diễn ra suôn sẻ", "The deployment went smoothly.", "S + go + adverb."]], topics: ["Reviewing requirements", "Investigating logs", "Proceeding with a release", "Revisiting a design", "Continuing a meeting", "Launching a page", "Reporting a smooth process"], sentences: ["Let's go over the requirements.", "I went through the logs.", "We can go ahead with the release.", "I went back to the original design.", "Let's go on with the next item.", "The new page will go live tomorrow.", "The deployment went smoothly."], forms: ["S + go over + N.", "S + go through + N.", "S + go ahead with + N.", "S + go back to + N.", "S + go on with + N.", "S + go live + time.", "S + go + adverb."], prompts: ["What requirements should you go over?", "What do you go through when debugging?", "When can the team go ahead with a release?", "When do you go back to an earlier design?", "How do you go on with a meeting?", "When will your next feature go live?", "What helps a deployment go smoothly?"] },
+            { v: "COME", title: "Ý tưởng, phát hiện và kết quả", grammar: "COME + particle/preposition thường mô tả điều xuất hiện, nảy ra hoặc trở thành.", words: "idea=ý tưởng;solution=giải pháp;across=bắt gặp;up=phát sinh;back=trở lại;out=ra mắt;along=tiến triển;source=nguồn;result=kết quả;simple=đơn giản;unexpected=không ngờ;together=cùng nhau;available=có sẵn;clear=rõ ràng;option=lựa chọn".split(";"), phrases: [["come up with", "nghĩ ra", "She came up with a simple solution.", "S + come up with + N."], ["come across", "tình cờ thấy", "I came across a useful article.", "S + come across + N."], ["come back to", "quay lại với", "Let's come back to this question later.", "S + come back to + N."], ["come down to", "quy về", "The choice comes down to cost and time.", "S + come down to + N."], ["come out", "được phát hành", "The update came out last week.", "S + come out + time."], ["come along", "tiến triển", "The project is coming along well.", "S + come along + adverb."], ["come together", "phối hợp thành công", "The team came together to solve the issue.", "S + come together + to V."]], topics: ["Creating a solution", "Finding a resource", "Parking a question", "Comparing trade-offs", "Announcing an update", "Reporting project progress", "Working as a team"], sentences: ["She came up with a simple solution.", "I came across a useful article.", "Let's come back to this question later.", "The choice comes down to cost and time.", "The update came out last week.", "The project is coming along well.", "The team came together to solve the issue."], forms: ["S + come up with + N.", "S + come across + N.", "S + come back to + N.", "S + come down to + N.", "S + come out + time.", "S + come along + adverb.", "S + come together + to V."], prompts: ["How do you come up with solutions?", "Have you come across a useful tool recently?", "What question should you come back to later?", "What does this decision come down to?", "What update came out recently?", "How is your project coming along?", "How can a team come together to solve a problem?"] },
+            { v: "GIVE", title: "Hỗ trợ, phản hồi và trao đổi", grammar: "GIVE + object thường diễn tả việc trao, cung cấp hoặc tạo ra điều gì.", words: "feedback=góp ý;advice=lời khuyên;hand=sự giúp đỡ;up=bỏ cuộc;back=trả lại;away=cho đi;out=phát ra;report=báo cáo;detail=chi tiết;support=hỗ trợ;response=phản hồi;example=ví dụ;permission=cho phép;notice=chú ý;presentation=thuyết trình".split(";"), phrases: [["give feedback", "đưa phản hồi", "My manager gave me useful feedback.", "S + give + person + feedback."], ["give someone a hand", "giúp ai một tay", "Could you give me a hand with this bug?", "give + person + a hand + with + N."], ["give up", "bỏ cuộc", "Don't give up when speaking feels difficult.", "S + give up + (V-ing)."], ["give back", "trả lại", "I gave the laptop back to IT.", "S + give back + object."], ["give out", "phát ra / phân phát", "The system gives out an error message.", "S + give out + N."], ["give away", "tiết lộ / tặng", "The demo gave away too much detail.", "S + give away + N."], ["give rise to", "dẫn đến", "A missing check can give rise to errors.", "S + give rise to + N."]], topics: ["Receiving feedback", "Asking for help", "Persisting with practice", "Returning equipment", "Explaining system output", "Preparing a demo", "Explaining causes"], sentences: ["My manager gave me useful feedback.", "Could you give me a hand with this bug?", "Don't give up when speaking feels difficult.", "I gave the laptop back to IT.", "The system gives out an error message.", "The demo gave away too much detail.", "A missing check can give rise to errors."], forms: ["S + give + person + feedback.", "give + person + a hand + with + N.", "S + give up + (V-ing).", "S + give back + object.", "S + give out + N.", "S + give away + N.", "S + give rise to + N."], prompts: ["What kind of feedback helps you improve?", "When do you ask a teammate to give you a hand?", "What helps you avoid giving up?", "What have you given back to someone?", "What error message does the system give out?", "What information should a demo not give away?", "What can give rise to a bug?"] },
+            { v: "KEEP", title: "Duy trì, theo dõi và kết nối", grammar: "KEEP + V-ing diễn tả tiếp tục; KEEP + object + complement diễn tả duy trì trạng thái.", words: "track=theo dõi;touch=liên lạc;mind=ghi nhớ;going=tiếp tục;away=tránh xa;pace=nhịp độ;record=hồ sơ;consistent=đều đặn;focus=tập trung; habit=thói quen;progress=tiến bộ;status=trạng thái;calm=bình tĩnh;promise=lời hứa;balance=cân bằng".split(";"), phrases: [["keep up with", "theo kịp", "I keep up with changes in React.", "S + keep up with + N."], ["keep on", "tiếp tục", "She kept on practicing after work.", "S + keep on + V-ing."], ["keep track of", "theo dõi", "We keep track of open bugs.", "S + keep track of + N."], ["keep in mind", "ghi nhớ", "Keep in mind that the deadline is Friday.", "keep in mind + clause."], ["keep in touch with", "giữ liên lạc", "I keep in touch with former teammates.", "S + keep in touch with + person."], ["keep away from", "tránh xa", "Keep test data away from production.", "keep + N + away from + N."], ["keep going", "tiếp tục cố gắng", "I kept going even when I felt nervous.", "S + keep going."]], topics: ["Keeping up with technology", "Maintaining practice", "Tracking bugs", "Remembering a deadline", "Staying connected", "Protecting production", "Staying motivated"], sentences: ["I keep up with changes in React.", "She kept on practicing after work.", "We keep track of open bugs.", "Keep in mind that the deadline is Friday.", "I keep in touch with former teammates.", "Keep test data away from production.", "I kept going even when I felt nervous."], forms: ["S + keep up with + N.", "S + keep on + V-ing.", "S + keep track of + N.", "keep in mind + clause.", "S + keep in touch with + person.", "keep + N + away from + N.", "S + keep going."], prompts: ["How do you keep up with new technology?", "What skill do you keep on practicing?", "How does your team keep track of tasks?", "What should your team keep in mind?", "Who do you keep in touch with?", "How do you keep test data away from production?", "When did you have to keep going?"] },
+            { v: "PUT", title: "Sắp xếp, hoãn và triển khai", grammar: "PUT + particle diễn tả đặt, hoãn, tắt hoặc đưa ý tưởng vào thực tế.", words: "priority=ưu tiên;off=hoãn;away=cất đi;together=lắp ráp;forward=đề xuất;out=tắt;into=thành;practice=thực hành;plan=kế hoạch;idea=ý tưởng;issue=vấn đề;meeting=cuộc họp;device=thiết bị;effort=nỗ lực;deadline=hạn chót".split(";"), phrases: [["put off", "hoãn", "We put off the meeting until Monday.", "S + put off + N/V-ing."], ["put together", "tập hợp / lắp ráp", "I put together a short demo.", "S + put together + N."], ["put forward", "đề xuất", "She put forward a practical idea.", "S + put forward + N."], ["put into practice", "áp dụng", "We put the new process into practice.", "S + put N into practice."], ["put away", "cất đi", "Please put away the test device.", "S + put away + object."], ["put out", "dập / phát hành", "The team put out a hotfix.", "S + put out + N."], ["put up with", "chịu đựng", "Users shouldn't have to put up with slow pages.", "S + put up with + N."]], topics: ["Rescheduling a meeting", "Preparing a demo", "Proposing an idea", "Applying a process", "Organizing equipment", "Releasing a hotfix", "Handling poor performance"], sentences: ["We put off the meeting until Monday.", "I put together a short demo.", "She put forward a practical idea.", "We put the new process into practice.", "Please put away the test device.", "The team put out a hotfix.", "Users shouldn't have to put up with slow pages."], forms: ["S + put off + N/V-ing.", "S + put together + N.", "S + put forward + N.", "S + put N into practice.", "S + put away + object.", "S + put out + N.", "S + put up with + N."], prompts: ["What meeting would you put off if necessary?", "What do you need to put together for a demo?", "What idea would you put forward?", "What new practice should your team put into practice?", "Where should you put away shared devices?", "When should a team put out a hotfix?", "What should users not have to put up with?"] },
+            { v: "RUN", title: "Sự cố, kiểm tra và tài nguyên", grammar: "RUN + giới từ thường nói về việc gặp sự cố, hết tài nguyên hoặc chạy thử.", words: "resource=tài nguyên;memory=bộ nhớ;error=lỗi;into=gặp phải;out=hết;through=chạy qua;against=đối mặt;test=kiểm thử;limit=giới hạn;report=báo cáo;unexpected=không mong đợi;network=mạng;failure=sự cố;retry=thử lại;capacity=dung lượng".split(";"), phrases: [["run into", "gặp phải", "We ran into an issue during testing.", "S + run into + N."], ["run out of", "hết", "The test server ran out of memory.", "S + run out of + N."], ["run through", "rà soát / chạy thử", "Let's run through the main flow.", "S + run through + N."], ["run by", "xin ý kiến", "I ran the idea by my manager.", "S + run N by + person."], ["run on", "chạy bằng", "The service runs on Node.js.", "S + run on + N."], ["run up against", "đối mặt với", "We ran up against a platform limit.", "S + run up against + N."], ["run over", "xem nhanh / vượt quá", "Let's run over the checklist once more.", "S + run over + N."]], topics: ["Finding an issue", "Handling exhausted resources", "Testing a flow", "Getting a second opinion", "Describing a runtime", "Working around a limit", "Reviewing a checklist"], sentences: ["We ran into an issue during testing.", "The test server ran out of memory.", "Let's run through the main flow.", "I ran the idea by my manager.", "The service runs on Node.js.", "We ran up against a platform limit.", "Let's run over the checklist once more."], forms: ["S + run into + N.", "S + run out of + N.", "S + run through + N.", "S + run N by + person.", "S + run on + N.", "S + run up against + N.", "S + run over + N."], prompts: ["What issue did you run into recently?", "What resource could a server run out of?", "Which flow should you run through before release?", "Who do you run a new idea by?", "What does your app run on?", "What limits has your team run up against?", "What should you run over before a demo?"] },
+            { v: "LOOK", title: "Tìm hiểu, chăm sóc và hướng về tương lai", grammar: "LOOK + particle/preposition diễn tả tìm kiếm, xem xét hoặc mong đợi.", words: "investigate=điều tra;research=nghiên cứu;look=nhìn;forward=hướng tới;after=chăm sóc;into=đào sâu;up=tra cứu;issue=vấn đề;documentation=tài liệu;future=tương lai;detail=chi tiết;warning=cảnh báo;solution=giải pháp;quality=chất lượng;career=sự nghiệp".split(";"), phrases: [["look into", "điều tra", "We are looking into the login issue.", "S + look into + N."], ["look after", "chăm sóc", "I look after the shared component.", "S + look after + N."], ["look for", "tìm kiếm", "We are looking for the root cause.", "S + look for + N."], ["look up", "tra cứu", "I looked up the API method.", "S + look up + N."], ["look forward to", "mong chờ", "I look forward to learning from the team.", "S + look forward to + N/V-ing."], ["look out for", "để ý / cảnh giác", "Look out for empty API responses.", "look out for + N."], ["look back on", "nhìn lại", "I look back on that release as a useful lesson.", "S + look back on + N."]], topics: ["Investigating a login issue", "Maintaining shared code", "Finding a cause", "Checking documentation", "Looking ahead in your career", "Watching for edge cases", "Reflecting on a release"], sentences: ["We are looking into the login issue.", "I look after the shared component.", "We are looking for the root cause.", "I looked up the API method.", "I look forward to learning from the team.", "Look out for empty API responses.", "I look back on that release as a useful lesson."], forms: ["S + look into + N.", "S + look after + N.", "S + look for + N.", "S + look up + N.", "S + look forward to + N/V-ing.", "look out for + N.", "S + look back on + N."], prompts: ["What issue is your team looking into?", "What shared code do you look after?", "How do you look for the cause of a bug?", "What do you look up in documentation?", "What are you looking forward to?", "What edge case should you look out for?", "What past project do you look back on?"] },
+            { v: "TURN", title: "Lựa chọn, thay đổi và kết quả", grammar: "TURN + particle diễn tả từ chối, biến đổi hoặc tìm đến ai để được giúp.", words: "option=lựa chọn;down=từ chối;out=hóa ra;into=thành;around=xoay chuyển;on=bật;off=tắt;request=yêu cầu;result=kết quả;feedback=góp ý;support=hỗ trợ;feature=tính năng;unexpected=bất ngờ;quality=chất lượng;decision=quyết định".split(";"), phrases: [["turn down", "từ chối", "We turned down the request because it was out of scope.", "S + turn down + N."], ["turn out", "hóa ra", "The fix turned out to be simple.", "S + turn out to be + adj."], ["turn into", "biến thành", "The small task turned into a larger project.", "S + turn into + N."], ["turn to", "tìm đến", "I turned to my teammate for advice.", "S + turn to + person + for + N."], ["turn on", "bật", "Turn on debug logging for this test.", "turn on + object."], ["turn off", "tắt", "We turned off the old feature flag.", "S + turn off + object."], ["turn around", "xoay chuyển", "The team turned the release around quickly.", "S + turn N around."]], topics: ["Declining out-of-scope work", "Unexpected results", "A task growing in scope", "Asking for advice", "Enabling debug logs", "Disabling an old flag", "Recovering a delayed release"], sentences: ["We turned down the request because it was out of scope.", "The fix turned out to be simple.", "The small task turned into a larger project.", "I turned to my teammate for advice.", "Turn on debug logging for this test.", "We turned off the old feature flag.", "The team turned the release around quickly."], forms: ["S + turn down + N.", "S + turn out to be + adjective.", "S + turn into + N.", "S + turn to + person + for + N.", "turn on + object.", "S + turn off + object.", "S + turn + object + around."], prompts: ["When might you turn down a request?", "Tell me about a fix that turned out to be simple.", "Has a small task turned into a big project?", "Who do you turn to for advice?", "When do you turn on debug logging?", "What old flag can you turn off?", "How can a team turn a delayed release around?"] },
+            { v: "DEAL / SOLVE", title: "Giải quyết vấn đề và cân nhắc phương án", grammar: "DEAL WITH và các cụm tương tự diễn tả cách xử lý vấn đề.", words: "issue=vấn đề;approach=cách tiếp cận;trade-off=đánh đổi;root cause=nguyên nhân gốc;cope=đối phó;resolve=giải quyết;sort=sắp xếp;workaround=cách khắc phục tạm;impact=tác động;priority=ưu tiên;constraint=ràng buộc;option=lựa chọn;settle=chốt;decision=quyết định;escalate=chuyển cấp".split(";"), phrases: [["deal with", "xử lý", "I deal with user-reported bugs first.", "S + deal with + N."], ["cope with", "đối phó", "We need to cope with higher traffic.", "S + cope with + N."], ["sort out", "giải quyết ổn thỏa", "Let's sort out the validation issue.", "S + sort out + N."], ["work through", "xử lý từng bước", "We worked through the failing tests.", "S + work through + N."], ["settle on", "chốt chọn", "We settled on the simpler approach.", "S + settle on + N."], ["come up against", "gặp trở ngại", "We came up against a browser limitation.", "S + come up against + N."], ["resolve", "giải quyết", "The patch resolved the timeout issue.", "S + resolve + N."]], topics: ["Prioritizing user issues", "Handling increased traffic", "Fixing validation", "Working through test failures", "Choosing an approach", "Facing a browser limit", "Confirming a fix"], sentences: ["I deal with user-reported bugs first.", "We need to cope with higher traffic.", "Let's sort out the validation issue.", "We worked through the failing tests.", "We settled on the simpler approach.", "We came up against a browser limitation.", "The patch resolved the timeout issue."], forms: ["S + deal with + N.", "S + cope with + N.", "S + sort out + N.", "S + work through + N.", "S + settle on + N.", "S + come up against + N.", "S + resolve + N."], prompts: ["How do you deal with urgent bugs?", "How can a team cope with a traffic spike?", "What issue should you sort out first?", "How do you work through failing tests?", "How did your team settle on its approach?", "What limitation have you come up against?", "What change resolved an issue?"] },
+            { v: "TALK / SPEAK", title: "Trao đổi, làm rõ và trình bày ý tưởng", grammar: "TALK about a topic; TALK to a person; TALK through a process.", words: "agenda=chương trình họp;clarify=làm rõ;interrupt=ngắt lời;opinion=ý kiến;concern=lo ngại;timeline=mốc thời gian;update=cập nhật;explain=giải thích;discuss=thảo luận;present=trình bày;audience=người nghe;question=câu hỏi;response=phản hồi;polite=lịch sự;summary=tóm tắt".split(";"), phrases: [["talk about", "nói về", "We talked about the release plan.", "S + talk about + N."], ["talk to", "nói chuyện với", "I talked to the designer about spacing.", "S + talk to + person."], ["talk over", "thảo luận kỹ", "Let's talk over the two options.", "S + talk over + N."], ["talk through", "giải thích từng bước", "I talked the team through the setup.", "S + talk + person + through + N."], ["speak up", "lên tiếng", "Please speak up if you see a risk.", "S + speak up."], ["bring up", "nêu ra", "She brought up an accessibility concern.", "S + bring up + N."], ["get across", "truyền đạt", "I tried to get my point across clearly.", "S + get + object + across."]], topics: ["Discussing a release plan", "Talking with design", "Comparing options", "Explaining setup steps", "Raising a concern", "Mentioning accessibility", "Making a point clearly"], sentences: ["We talked about the release plan.", "I talked to the designer about spacing.", "Let's talk over the two options.", "I talked the team through the setup.", "Please speak up if you see a risk.", "She brought up an accessibility concern.", "I tried to get my point across clearly."], forms: ["S + talk about + topic.", "S + talk to + person.", "S + talk over + N.", "S + talk + person + through + N.", "S + speak up + (about N).", "S + bring up + N.", "S + get + object + across."], prompts: ["What should your team talk about before release?", "Who do you talk to about design questions?", "What options should you talk over?", "What process can you talk someone through?", "When should a teammate speak up?", "What concern would you bring up in a meeting?", "How do you get a technical point across?"] },
+            { v: "WORK", title: "Phối hợp, giải pháp và tiến độ", grammar: "WORK + preposition diễn tả nhiệm vụ, cộng tác, mục tiêu hoặc cách xử lý.", words: "collaborate=phối hợp;workaround=cách khắc phục;goal=mục tiêu;progress=tiến độ;independently=độc lập;reliable=đáng tin;maintain=bảo trì;scope=phạm vi;estimate=ước lượng;dependency=phụ thuộc;review=đánh giá;approach=cách tiếp cận;constraint=ràng buộc;effort=nỗ lực;outcome=kết quả".split(";"), phrases: [["work on", "làm về", "I am working on the upload flow.", "S + work on + N."], ["work with", "làm việc cùng", "I work with designers and backend engineers.", "S + work with + person/team."], ["work out", "tìm ra / có kết quả", "We worked out a way to reduce loading time.", "S + work out + N."], ["work toward", "hướng tới", "We are working toward the release date.", "S + work toward + goal."], ["work around", "tìm cách vượt hạn chế", "We worked around the browser limitation.", "S + work around + N."], ["work through", "xử lý từng bước", "I worked through the review comments.", "S + work through + N."], ["work well with", "phối hợp tốt với", "This layout works well with long labels.", "S + work well with + N."]], topics: ["Building an upload flow", "Cross-functional teamwork", "Finding a performance solution", "Working toward a deadline", "Handling a platform limit", "Addressing review comments", "Checking responsive layouts"], sentences: ["I am working on the upload flow.", "I work with designers and backend engineers.", "We worked out a way to reduce loading time.", "We are working toward the release date.", "We worked around the browser limitation.", "I worked through the review comments.", "This layout works well with long labels."], forms: ["S + work on + N.", "S + work with + person/team.", "S + work out + N.", "S + work toward + goal.", "S + work around + N.", "S + work through + N.", "S + work well with + N."], prompts: ["What feature are you working on?", "Who do you work with most closely?", "How did you work out a solution?", "What goal is your team working toward?", "What limitation did you work around?", "How do you work through review comments?", "What design works well with mobile screens?"] },
+            { v: "THINK", title: "Suy nghĩ, cân nhắc và nêu quan điểm", grammar: "THINK about/of/over/through kết hợp với chủ đề hoặc lựa chọn khác nhau.", words: "consider=cân nhắc;assumption=giả định;evidence=bằng chứng;option=lựa chọn;consequence=hệ quả;perspective=góc nhìn;reasonable=hợp lý;trade-off=đánh đổi;decide=quyết định;reflect=suy ngẫm;predict=dự đoán;alternative=phương án khác;concern=lo ngại;recommend=đề xuất;uncertain=không chắc".split(";"), phrases: [["think about", "nghĩ về", "I am thinking about a simpler design.", "S + think about + N/V-ing."], ["think of", "nảy ra / nghĩ về", "I can't think of a better example.", "S + think of + N."], ["think over", "cân nhắc kỹ", "Let's think over the proposal before we decide.", "S + think over + N."], ["think through", "suy xét kỹ", "We need to think through the edge cases.", "S + think through + N."], ["think ahead", "tính trước", "Good teams think ahead about maintenance.", "S + think ahead about + N."], ["think back to", "nhớ lại", "I think back to my first project.", "S + think back to + N."], ["think twice about", "cân nhắc lại", "Think twice about removing that validation.", "S + think twice about + N/V-ing."]], topics: ["Choosing a simpler design", "Finding an example", "Reviewing a proposal", "Considering edge cases", "Planning maintenance", "Reflecting on a project", "Reconsidering a risky change"], sentences: ["I am thinking about a simpler design.", "I can't think of a better example.", "Let's think over the proposal before we decide.", "We need to think through the edge cases.", "Good teams think ahead about maintenance.", "I think back to my first project.", "Think twice about removing that validation."], forms: ["S + think about + N/V-ing.", "S + think of + N.", "S + think over + N.", "S + think through + N.", "S + think ahead about + N.", "S + think back to + N.", "S + think twice about + N/V-ing."], prompts: ["What are you thinking about changing?", "Can you think of a useful example?", "What proposal should you think over?", "Which edge cases should the team think through?", "How can your team think ahead about maintenance?", "What do you think back to when solving this?", "What change should you think twice about?"] }
         ];
-        const weeks = ["Nền tảng câu", "Thói quen & câu hỏi", "Việc đang diễn ra", "Kể chuyện quá khứ", "Kế hoạch & khả năng", "Nối ý & diễn đạt", "Giao tiếp công việc", "Tổng hợp & phỏng vấn", "Phỏng vấn & tổng kết"];
-        const vocabWeeks = [
-            `engineer:kỹ sư,developer:lập trình viên,experience:kinh nghiệm,skill:kỹ năng,career:sự nghiệp|parent:bố/mẹ,sibling:anh chị em,hometown:quê nhà,relative:họ hàng,pet:thú cưng|apartment:căn hộ,neighborhood:khu phố,city:thành phố,countryside:nông thôn,address:địa chỉ|morning:buổi sáng,breakfast:bữa sáng,exercise:tập thể dục,shower:tắm, commute:đi làm hằng ngày|motorbike xe máy,bus xe buýt,traffic giao thông,distance khoảng cách,arrive đến nơi|office văn phòng,colleague đồng nghiệp,manager quản lý,team nhóm,project dự án|evening buổi tối,dinner bữa tối,weekend cuối tuần,relax thư giãn,habit thói quen`.replaceAll("motorbike xe máy", "motorbike:xe máy").replaceAll("bus xe buýt", "bus:xe buýt").replaceAll("traffic giao thông", "traffic:giao thông").replaceAll("distance khoảng cách", "distance:khoảng cách").replaceAll("arrive đến nơi", "arrive:đến nơi").replaceAll("office văn phòng", "office:văn phòng").replaceAll("colleague đồng nghiệp", "colleague:đồng nghiệp").replaceAll("manager quản lý", "manager:quản lý").replaceAll("team nhóm", "team:nhóm").replaceAll("project dự án", "project:dự án").replaceAll("evening buổi tối", "evening:buổi tối").replaceAll("dinner bữa tối", "dinner:bữa tối").replaceAll("weekend cuối tuần", "weekend:cuối tuần").replaceAll("relax thư giãn", "relax:thư giãn").replaceAll("habit thói quen", "habit:thói quen").split("|").map(x => x.split(",")),
-            `routine:thói quen hằng ngày,schedule:lịch trình,usually:thường xuyên,always:luôn luôn,sometimes:đôi khi|email:thư điện tử,task:công việc cần làm,meeting:cuộc họp,deadline:hạn chót,break:giờ nghỉ|coffee:cà phê,lunch:bữa trưa,snack:đồ ăn nhẹ,water:nước,nap:giấc ngủ ngắn|review:xem xét,feedback:góp ý,question:câu hỏi,answer:câu trả lời,practice:luyện tập|free:rảnh rỗi,available:có thời gian,busy:bận,early:sớm,late:muộn|hobby:sở thích,reading:việc đọc sách,walking:đi bộ,cooking:nấu ăn,visit:thăm|frequency:tần suất,daily:hằng ngày,weekly:hằng tuần,rarely:hiếm khi,never:không bao giờ`.split("|").map(x => x.split(",")),
-            `feature:tính năng,bug:lỗi phần mềm,fix:sửa chữa,release:bản phát hành,test:kiểm thử|currently:hiện tại,now:bây giờ,progress:tiến độ,loading:đang tải,update:cập nhật|design:thiết kế,layout:bố cục,screen:màn hình,button:nút bấm,form:biểu mẫu|request:yêu cầu,response:phản hồi,database:cơ sở dữ liệu,server:máy chủ,client:ứng dụng khách|carefully:cẩn thận,quickly:nhanh chóng,clearly:rõ ràng,correctly:đúng cách,slowly:chậm rãi|feel:cảm thấy,excited:hào hứng,tired:mệt mỏi,confident:tự tin,unsure:không chắc chắn|debug:gỡ lỗi,investigate:điều tra,improve:cải thiện,build:xây dựng,deploy:triển khai`.split("|").map(x => x.split(",")),
-            `yesterday:hôm qua,last week:tuần trước,ago:trước đây,already:đã rồi,finished:đã hoàn thành|went:đã đi,had:đã có/dùng,met:đã gặp,made:đã làm,found:đã tìm thấy|problem:vấn đề,cause:nguyên nhân,result:kết quả,solution:giải pháp,reason:lý do|failed:đã thất bại,worked:đã hoạt động,changed:đã thay đổi,joined:đã tham gia,sent:đã gửi|first:đầu tiên,then:sau đó,after that:sau đó,finally:cuối cùng,before:trước khi|because:bởi vì,so:vì vậy,but:nhưng,although:mặc dù,however:tuy nhiên|report:báo cáo,accomplish:hoàn thành,challenge:thử thách,lesson:bài học,experience:trải nghiệm`.split("|").map(x => x.split(",")),
-            `plan:kế hoạch,goal:mục tiêu,will:sẽ,tonight:tối nay,tomorrow:ngày mai|prepare:chuẩn bị,arrange:sắp xếp,expect:mong đợi,decide:quyết định,choose:lựa chọn|can:có thể,able:có khả năng,possible:có thể xảy ra,should:nên,must:phải|advice:lời khuyên,suggestion:gợi ý,option:lựa chọn,approach:cách tiếp cận,idea:ý tưởng|improve:cải thiện,learn:học,study:học tập,practice:luyện tập,achieve:đạt được|if:nếu,unless:trừ khi,perhaps:có lẽ,maybe:có thể,probably:có lẽ|future:tương lai,career:sự nghiệp,promotion:thăng chức,opportunity:cơ hội,goal:mục tiêu`.split("|").map(x => x.split(",")),
-            `agree:đồng ý,opinion:ý kiến,mean:ý nghĩa,explain:giải thích,mention:đề cập|reason:lý do,example:ví dụ,point:ý chính,detail:chi tiết,idea:ý tưởng|because:bởi vì,although:mặc dù,while:trong khi,when:khi,if:nếu|conversation:cuộc trò chuyện,topic:chủ đề,continue:tiếp tục,repeat:lặp lại,understand:hiểu|polite:lịch sự,perhaps:có lẽ,actually:thật ra,exactly:chính xác,especially:đặc biệt|confused:bối rối,clear:rõ ràng,comfortable:thoải mái,nervous:hồi hộp,confident:tự tin|connect:kết nối,compare:so sánh,describe:mô tả,prefer:thích hơn,decide:quyết định`.split("|").map(x => x.split(",")),
-            `stand-up:họp cập nhật,blocker:vướng mắc,status:tình trạng,priority:ưu tiên,estimate:ước lượng|backend:hệ thống phía máy chủ,frontend:giao diện phía người dùng,endpoint:điểm cuối,field:trường dữ liệu,payload:dữ liệu gửi đi|clarify:làm rõ,confirm:xác nhận,discuss:thảo luận,share:chia sẻ,request:yêu cầu|available:có sẵn,delayed:bị trì hoãn,ready:sẵn sàng,ongoing:đang diễn ra,complete:hoàn tất|review:xem xét,approve:phê duyệt,merge:gộp mã,commit:lưu thay đổi,branch:nhánh mã|support:hỗ trợ,help:giúp đỡ,investigate:điều tra,resolve:giải quyết,report:báo cáo|teammate:đồng đội,designer:nhà thiết kế,developer:lập trình viên,stakeholder:bên liên quan,client:khách hàng`.split("|").map(x => x.split(",")),
-            `strength:điểm mạnh,weakness:điểm yếu,achievement:thành tựu,responsibility:trách nhiệm,role:vai trò|challenge:thử thách,handle:xử lý,overcome:vượt qua,learned:đã học,proud:tự hào|project:dự án,contribute:đóng góp,build:xây dựng,maintain:bảo trì,deliver:bàn giao|reliable:đáng tin cậy,patient:kiên nhẫn,curious:tò mò,flexible:linh hoạt,detail-oriented:tỉ mỉ|interview:phỏng vấn,question:câu hỏi,answer:câu trả lời,example:ví dụ,experience:kinh nghiệm|confident:tự tin,fluent:lưu loát,goal:mục tiêu,progress:tiến bộ,feedback:góp ý|summary:tóm tắt,career:sự nghiệp,teamwork:làm việc nhóm,communication:giao tiếp,opportunity:cơ hội`.split("|").map(x => x.split(","))
-            , `introduce:giới thiệu,background:nền tảng cá nhân,professional:chuyên nghiệp,position:vị trí,industry:ngành nghề|accomplishment:thành tựu,impact:tác động,measurable:có thể đo lường,successful:thành công,effort:nỗ lực|strength:điểm mạnh,weakness:điểm yếu,example:ví dụ,improve:cải thiện,feedback:góp ý|teamwork:làm việc nhóm,communication:giao tiếp,ownership:tinh thần trách nhiệm,adaptable:dễ thích nghi,organized:có tổ chức|motivation:động lực,ambition:tham vọng,challenge:thử thách,solution:giải pháp, result:kết quả|follow-up:câu hỏi tiếp nối,clarify:làm rõ,elaborate:nói rõ hơn,confident:tự tin,natural:tự nhiên|review:ôn tập,progress:tiến bộ,consistent:đều đặn,fluency:sự lưu loát,practice:luyện tập`.replaceAll(" result:", "result:").split("|").map(x => x.split(","))
-        ];
-        const prepPhrases = [
-            `work on:Tập trung làm việc về · I am working on a new feature.|talk to:Nói chuyện với · I talked to my manager.|ask for:Yêu cầu/nhờ · I asked for feedback.|listen to:Lắng nghe · I listen to English every day.|wait for:Chờ đợi · We are waiting for the API response.|focus on:Tập trung vào · I am focusing on my pronunciation.|belong to:Thuộc về · This task belongs to our team.`,
-            `depend on:Phụ thuộc vào · It depends on the deadline.|agree with:Đồng ý với ai · I agree with my teammate.|apologize for:Xin lỗi vì · I apologized for the delay.|apply for:Ứng tuyển vào · She applied for a new role.|deal with:Xử lý · I deal with bugs every day.|look at:Nhìn/xem xét · Let's look at the logs.|care about:Quan tâm đến · I care about code quality.`,
-            `look for:Tìm kiếm · I am looking for the cause.|look after:Chăm sóc · She looks after the release.|reply to:Trả lời · He replied to my message.|speak to:Nói chuyện với · I need to speak to QA.|think about:Suy nghĩ về · I will think about your suggestion.|prepare for:Chuẩn bị cho · We are preparing for the demo.|succeed in:Thành công trong · She succeeded in fixing it.`,
-            `hear about:Nghe nói về · I heard about the new feature.|learn from:Học hỏi từ · I learned a lot from my team.|pay for:Trả tiền cho · The company paid for the course.|recover from:Hồi phục sau · The app recovered from the error.|suffer from:Bị/ chịu · The page suffers from slow loading.|result in:Dẫn đến · The change resulted in fewer bugs.|consist of:Bao gồm · The team consists of eight people.`,
-            `sign up for:Đăng ký · I signed up for an English course.|plan for:Lên kế hoạch cho · We planned for extra testing.|hope for:Hy vọng · I hope for a quick response.|search for:Tìm kiếm · We searched for a simpler solution.|care for:Chăm sóc · He cares for his parents.|agree on:Thống nhất về · We agreed on the field names.|concentrate on:Tập trung vào · I concentrate on one task at a time.`,
-            `complain about:Phàn nàn về · The user complained about the layout.|ask about:Hỏi về · I asked about the deadline.|talk about:Nói về · We talked about the project.|worry about:Lo lắng về · Don't worry about small mistakes.|argue with:Tranh luận với · I discussed it with my teammate.|connect to:Kết nối với · The app connects to a local service.|refer to:Tham khảo/đề cập · Please refer to the document.`,
-            `check with:Xác nhận với · I will check with the backend team.|collaborate with:Phối hợp với · I collaborate with designers.|communicate with:Giao tiếp với · I communicate with the client.|provide with:Cung cấp cho · The tool provides us with a report.|compare with:So sánh với · Compare it with the old version.|contribute to:Đóng góp vào · I contributed to the project.|respond to:Phản hồi · She responded to the question.`,
-            `introduce to:Giới thiệu với · Let me introduce myself to the team.|learn about:Tìm hiểu về · I learned about the company.|prepare for:Chuẩn bị cho · I prepared for the interview.|talk through:Giải thích lần lượt · I talked through my solution.|reflect on:Suy ngẫm về · I reflected on my progress.|ask about:Hỏi về · I asked about the role.|follow up on:Theo dõi tiếp · I followed up on my application.`,
-            `work with:Làm việc cùng · I work with React and Node.js.|specialize in:Chuyên về · I specialize in front-end development.|participate in:Tham gia · I participated in the planning meeting.|focus on:Tập trung vào · I focus on clear communication.|improve on:Cải thiện · I want to improve on this result.|believe in:Tin vào · I believe in daily practice.|deal with:Giải quyết · I can deal with simple bugs.`
-        ];
-        const vocabDaily = vocabWeeks.flatMap((w, wi) => Array.from({ length: 7 }, (_, di) => w[di].map(x => { const p = x.split(":"); return [p[0], p[1] || ""] })));
-        const phraseDaily = Array.from({ length: 63 }, (_, i) => { const s = prepPhrases[Math.floor(i / 7)].split("|")[i % 7].split(":"); return [s[0], s[1].split(" · ")[0], s[1].split(" · ")[1] || ""] });
-        const key = "english-daily-56-v1"; let saved = {}; try { saved = JSON.parse(localStorage.getItem(key) || "{}") } catch { }
-        let current = Math.min(Math.max(Number(saved.current) || 0, 0), lessons.length - 1);
-        const esc = s => s.replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-        function speak(text, button) { if (!('speechSynthesis' in window)) { button.textContent = 'Voice unavailable'; return } window.speechSynthesis.cancel(); const utterance = new SpeechSynthesisUtterance(text); utterance.lang = 'en-US'; utterance.rate = .88; const voices = window.speechSynthesis.getVoices(); utterance.voice = voices.find(v => v.lang === 'en-US') || voices.find(v => v.lang.startsWith('en')) || null; button.textContent = '▶ Playing'; utterance.onend = () => button.textContent = '🔊 Listen'; utterance.onerror = () => button.textContent = '🔊 Listen'; window.speechSynthesis.speak(utterance) }
-        function renderList() { const el = document.querySelector("#daylist"); el.innerHTML = lessons.map((l, i) => '<button class="day ' + (current === i ? 'active ' : '') + (saved.done?.[i] ? 'done' : '') + '" data-i="' + i + '"><span class="dot">' + (saved.done?.[i] ? '✓' : i + 1) + '</span><span><b>Ngày ' + (i + 1) + '</b><small>' + esc(l[0]) + '</small></span></button>').join(""); el.querySelectorAll(".day").forEach(b => b.onclick = () => select(+b.dataset.i)) }
+        const commonWords = ["requirement=yêu cầu", "estimate=ước lượng", "feedback=góp ý", "approach=cách tiếp cận", "trade-off=đánh đổi", "release=bản phát hành", "review=xem xét", "impact=tác động", "concern=lo ngại", "result=kết quả", "maintain=bảo trì", "clarify=làm rõ", "improve=cải thiện", "challenge=thử thách", "solution=giải pháp"];
+        const days = units.flatMap((u, wi) => u.phrases.map((p, di) => ({ week: wi, di, unit: u, phrase: p, topic: u.topics[di], sentence: u.sentences[di], form: u.forms[di], prompt: u.prompts[di] })));
+        const KEY = "english-path-16-30-v1"; let state = {}; try { state = JSON.parse(localStorage.getItem(KEY) || "{}") } catch { } let current = Math.min(Math.max(Number(state.current) || 0, 0), days.length - 1);
+        const escapeHtml = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+        let englishVoices = [], activeVoice = null; function refreshVoices() { const el = document.querySelector("#voice"); if (!el || !("speechSynthesis" in window)) return; englishVoices = speechSynthesis.getVoices().filter(v => v.lang.toLowerCase().startsWith("en")); el.innerHTML = englishVoices.length ? englishVoices.map((v, i) => '<option value="' + i + '">' + escapeHtml(v.name) + " · " + escapeHtml(v.lang) + "</option>").join("") : '<option value="">No English voice found</option>'; activeVoice = englishVoices[0] || null; el.onchange = () => activeVoice = englishVoices[Number(el.value)] || null }
+        function say(text, button) { if (!("speechSynthesis" in window)) { button.textContent = "Voice unavailable"; return } speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = activeVoice?.lang || "en-US"; u.voice = activeVoice; u.rate = Number(document.querySelector("#rate").value); button.textContent = "▶ Playing"; u.onend = () => button.textContent = "🔊 Listen"; u.onerror = () => button.textContent = "🔊 Listen"; speechSynthesis.speak(u) }
+        function audioButton(text, label) { const b = document.createElement("button"); b.className = "speak"; b.textContent = label || "🔊 Listen"; b.onclick = () => say(text, b); return b }
         function render() {
-            const d = lessons[current], week = Math.floor(current / 7); document.querySelector("#lesson").innerHTML = '<div class="eyebrow">Tuần ' + (week + 1) + ' · ' + weeks[week] + ' · Ngày ' + (current + 1) + '</div><h2>' + esc(d[0]) + '</h2><p class="goal">' + esc(d[1]) + '</p><div class="block"><h3>5 từ vựng hôm nay</h3>' + vocabDaily[current % vocabDaily.length].map(x => '<div class="example"><div><strong>' + esc(x[0]) + '</strong><span>' + esc(x[1]) + '</span></div><span class="tag">Đọc thành tiếng</span></div>').join("") + '</div><div class="block"><h3>Động từ + giới từ</h3><div class="example"><div><strong>' + esc(phraseDaily[current % phraseDaily.length][0]) + '</strong><span>' + esc(phraseDaily[current % phraseDaily.length][1]) + '</span><span>' + esc(phraseDaily[current % phraseDaily.length][2]) + '</span></div><span class="tag">Học cả cụm</span></div></div><div class="block"><h3>Mẫu câu hôm nay</h3>' + d.slice(2, 5).map((x, i) => '<div class="example"><div><strong>' + esc(x) + '</strong><span>' + ["Câu mẫu 1", "Câu mẫu 2", "Câu mẫu 3"][i] + '</span></div><span class="tag">Đọc thành tiếng</span></div>').join("") + '</div><div class="block"><h3>Đến lượt bạn</h3><div class="prompt"><p><b>' + esc(d[5]) + '</b></p><span class="note">Hãy thử trả lời bằng 2–3 câu tiếng Anh trước khi xem gợi ý.</span><br><button class="hint" id="hint">Xem câu trả lời gợi ý</button><div class="answer" id="answer">' + esc(d[6]) + '</div></div><textarea class="write" id="myanswer" placeholder="Viết câu trả lời của bạn ở đây (không bắt buộc)…">' + esc(saved.notes?.[current] || "") + '</textarea><div class="tools"><button class="button" id="complete">' + (saved.done?.[current] ? '✓ Đã hoàn thành' : 'Đánh dấu đã luyện') + '</button><button class="button secondary" id="save">Lưu câu trả lời</button></div><p class="note">Mẹo: nói thành tiếng trước khi gõ. Chỉ cần nói được ý chính bằng câu đơn giản.</p></div><div class="nav"><button class="button secondary" id="prev" ' + (current === 0 ? 'disabled' : '') + '>← Ngày trước</button><button class="button secondary" id="next" ' + (current === lessons.length - 1 ? 'disabled' : '') + '>Ngày tiếp →</button></div>';
-            document.querySelectorAll(".example").forEach(row => { const target = row.querySelector("strong")?.textContent; if (!target) return; const b = document.createElement("button"); b.className = "speak"; b.type = "button"; b.textContent = "🔊 Listen"; b.setAttribute("aria-label", "Nghe phát âm: " + target); b.onclick = () => speak(target, b); row.appendChild(b) }); const questionButton = document.createElement("button"); questionButton.className = "speak prompt-audio"; questionButton.type = "button"; questionButton.textContent = "🔊 Listen to the question"; questionButton.onclick = () => speak(d[5], questionButton); document.querySelector("#hint").before(questionButton); const answerButton = document.createElement("button"); answerButton.className = "speak prompt-audio"; answerButton.type = "button"; answerButton.textContent = "🔊 Listen to the sample answer"; answerButton.hidden = true; answerButton.onclick = () => speak(d[6], answerButton); document.querySelector("#answer").after(answerButton);
-            document.querySelector("#hint").onclick = () => { document.querySelector("#answer").classList.toggle("show"); answerButton.hidden = !document.querySelector("#answer").classList.contains("show"); document.querySelector("#hint").textContent = document.querySelector("#answer").classList.contains("show") ? "Ẩn gợi ý" : "Xem câu trả lời gợi ý" };
-            document.querySelector("#complete").onclick = () => { saved.done = saved.done || {}; saved.done[current] = !saved.done[current]; persist(); render() };
-            document.querySelector("#save").onclick = () => { saved.notes = saved.notes || {}; saved.notes[current] = document.querySelector("#myanswer").value; persist(); document.querySelector("#save").textContent = "Đã lưu ✓"; setTimeout(() => { let b = document.querySelector("#save"); if (b) b.textContent = "Lưu câu trả lời" }, 1200) };
-            document.querySelector("#prev").onclick = () => select(current - 1); document.querySelector("#next").onclick = () => select(current + 1); renderList(); updateProgress()
+            const d = days[current], u = d.unit, words = u.words; const vocab = Array.from({ length: 5 }, (_, j) => words[(d.di * 2 + j) % words.length]); document.querySelector("#lesson").innerHTML = '<div class="eyebrow">Tuần ' + (d.week + 16) + ' · ' + escapeHtml(u.v) + '</div><h2>Ngày ' + (d.week * 7 + d.di + 1) + ': ' + escapeHtml(d.topic) + '</h2><p class="goal">' + escapeHtml(u.title) + ' · ' + escapeHtml(u.grammar) + '</p><div class="block"><h3>5 từ vựng theo chủ đề</h3>' + vocab.map(x => { const [a, b] = x.split("="); return '<div class="row"><div><strong>' + escapeHtml(a) + '</strong><span>' + escapeHtml(b) + '</span></div></div>' }).join("") + '<p class="note">Ôn lặp có chủ đích: nhóm từ được nhắc lại trong tuần để giúp bạn nhớ lâu hơn.</p></div><div class="block"><h3>Cụm từ phổ biến với ' + escapeHtml(u.v) + '</h3>' + u.phrases.map((x, i) => { const [a, b, c, f] = x; return '<div class="row"><div><strong>' + escapeHtml(a) + (i === d.di ? ' · Hôm nay' : '') + '</strong><span>' + escapeHtml(b) + '</span></div>' + (i === d.di ? '<span class="tag"></span>' : '') + '</div>' }).join("") + '</div><div class="block"><h3>Câu mẫu và cấu trúc</h3><div class="row"><div><strong>' + escapeHtml(d.sentence) + '</strong><span class="formula">' + escapeHtml(d.form) + '</span></div></div></div><div class="block"><h3>Đến lượt bạn</h3><div class="prompt"><b>' + escapeHtml(d.prompt) + '</b><p class="note">Trả lời bằng 2–3 câu. Dùng cụm từ hôm nay nếu có thể.</p></div></div><div class="block"><h3>Đoạn đọc cuối ngày</h3><p class="reading" id="passage"></p><button id="readPassage" class="speak">🔊 Nghe đoạn đọc</button><p class="note">Nghe một lần, đọc theo một lần, sau đó thử kể lại bằng lời của bạn.</p></div><div class="nav"><button class="btn" id="prev" ' + (current === 0 ? 'disabled' : '') + '>← Bài trước</button><button class="btn" id="done">' + (state.done?.[current] ? '✓ Đã luyện' : 'Đánh dấu đã luyện') + '</button><button class="btn" id="next" ' + (current === days.length - 1 ? 'disabled' : '') + '>Bài tiếp →</button></div>';
+            const passage = d.sentence + " I use this expression in daily life or at work. It helps me explain the situation clearly and share the next step."; document.querySelector("#passage").textContent = passage; document.querySelector("#readPassage").onclick = e => say(passage, e.currentTarget); document.querySelector("#prev").onclick = () => select(current - 1); document.querySelector("#next").onclick = () => select(current + 1); document.querySelector("#done").onclick = () => { state.done = state.done || {}; state.done[current] = !state.done[current]; persist(); render() }; renderList(); progress()
         }
-        function persist() { localStorage.setItem(key, JSON.stringify(saved)); updateProgress(); renderList() }
-        function updateProgress() { let n = Object.keys(saved.done || {}).filter(k => saved.done[k]).length; document.querySelector("#streak").textContent = n + " / " + lessons.length + " ngày hoàn thành"; document.querySelector("#pct").textContent = Math.round(n / lessons.length * 100) + "%"; document.querySelector("#fill").style.width = (n / lessons.length * 100) + "%" }
-        function select(i) { current = Math.max(0, Math.min(i, lessons.length - 1)); saved.current = current; localStorage.setItem(key, JSON.stringify(saved)); render() }
-        render();
+        function renderList() { document.querySelector("#days").innerHTML = days.map((d, i) => '<button class="day ' + (i === current ? 'active ' : '') + (state.done?.[i] ? 'done' : '') + '" data-i="' + i + '"><span class="num">' + (state.done?.[i] ? '✓' : i + 1) + '</span><span><b>Tuần ' + (d.week + 16) + '</b><small>' + escapeHtml(d.topic) + '</small></span></button>').join(""); document.querySelectorAll(".day").forEach(b => b.onclick = () => select(Number(b.dataset.i))) }
+        function progress() { const n = Object.keys(state.done || {}).filter(k => state.done[k]).length; document.querySelector("#progress").textContent = n + " / " + days.length + " ngày"; document.querySelector("#percent").textContent = Math.round(n / days.length * 100) + "%"; document.querySelector("#fill").style.width = (n / days.length * 100) + "%" }
+        function persist() { localStorage.setItem(KEY, JSON.stringify(state)); progress(); renderList() }
+        function select(i) { current = Math.max(0, Math.min(days.length - 1, i)); state.current = current; localStorage.setItem(KEY, JSON.stringify(state)); render() }
+        document.querySelector("#rate").oninput = e => document.querySelector("#rateLabel").textContent = Number(e.target.value).toFixed(2) + "×"; document.querySelector("#preview").onclick = e => say("Hello. This is a preview of the selected English voice.", e.currentTarget); refreshVoices(); if ("speechSynthesis" in window) speechSynthesis.onvoiceschanged = refreshVoices; render();
     </script>
 </body>
 
