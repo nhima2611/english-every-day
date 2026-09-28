@@ -305,6 +305,25 @@
 
         .row > .reading { margin: 0; padding: 0; min-width: 0; overflow-wrap: anywhere; }
 
+        .review { scroll-margin-top: 20px; }
+        .review > .btn { margin: 5px 8px 5px 0; }
+        .review-step { font-size: 13px; font-weight: 700; color: var(--green); }
+        .flashcard { text-align: center; padding: 28px 16px; background: #f4f8f0; border-radius: 14px; }
+        .flash-word { font-size: clamp(24px, 5vw, 34px); font-weight: 700; margin: 0 0 16px; overflow-wrap: anywhere; }
+        .flash-meaning { font-size: 20px; margin-bottom: 0; }
+        .review .speak { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; }
+        .review .speak svg { width: 20px; height: 20px; }
+        .question { white-space: pre-line; line-height: 1.8; }
+        .review label { display: block; margin: 20px 0 8px; font-weight: 650; }
+        .review input { width: 100%; min-width: 0; padding: 12px; border: 1px solid #9aafa4; border-radius: 8px; font: inherit; }
+        .review input:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
+        .review-score { font-size: 40px; font-weight: 750; color: var(--green); margin: 12px 0 0; }
+        .review-score span { font-size: 20px; color: var(--muted); }
+        .review li { margin: 10px 0; overflow-wrap: anywhere; }
+        .review summary { cursor: pointer; padding: 10px 0; color: var(--green); }
+        .review .btn { min-height: 44px; white-space: normal; }
+        #reviewFeedback { overflow-wrap: anywhere; }
+        @media(max-width:480px) { .top { align-items: flex-start; flex-direction: column; } }
         .tools {
             display: flex;
             gap: 9px;
@@ -398,6 +417,7 @@
         <footer>Nghe câu mẫu rồi đọc theo. Với 5 từ, hãy thử tự đặt ít nhất một câu. Giọng đọc dùng voice tiếng Anh có
             sẵn trên thiết bị.</footer>
     </main>
+    <script src="review.js"></script>
     <script>
         const units = [
             {
@@ -523,7 +543,7 @@
             if ('speechSynthesis' in window) speechSynthesis.cancel();
             document.querySelector('#audioStatus').textContent = '';
         }
-        function say(text, button) {
+        function say(text, button, rateOverride) {
             if (!('speechSynthesis' in window)) {
                 document.querySelector('#audioStatus').textContent = 'Trình duyệt này chưa hỗ trợ giọng đọc.'; return;
             }
@@ -533,7 +553,7 @@
             const utterance = new SpeechSynthesisUtterance(text);
             utterance.lang = activeVoice?.lang || 'en-US';
             if (activeVoice) utterance.voice = activeVoice;
-            utterance.rate = Number(document.querySelector('#rate').value);
+            utterance.rate = rateOverride ?? Number(document.querySelector('#rate').value);
             playing = { button, utterance };
             button.setAttribute('aria-pressed', 'true');
             document.querySelector('#audioStatus').textContent = 'Đang đọc. Bấm lại nút loa để dừng.';
@@ -589,19 +609,20 @@
                     <h3>Học thêm một từ</h3>${learningRow(newWord, newMeaning)}
                     <p class="note">Từ được tô màu trong đoạn đọc sẽ được ôn lại suốt tuần. Nghe, đọc theo rồi thử kể lại bằng lời của bạn.</p>
                 </div>
+                <section class="block review" id="review" aria-labelledby="reviewTitle"></section>
                 <div class="nav">
                     <button class="btn" id="prev" ${current === 0 ? 'disabled' : ''}>← Bài trước</button>
-                    <button class="btn" id="done">${state.done?.[current] ? '✓ Đã luyện' : 'Đánh dấu đã luyện'}</button>
+                    <button class="btn" id="done">${state.done?.[current] ? '✓ Đã học' : 'Đánh dấu đã học'}</button>
                     <button class="btn" id="next" ${current === days.length - 1 ? 'disabled' : ''}>Bài tiếp →</button>
                 </div>`;
             document.querySelectorAll('[data-speech]').forEach(button => button.onclick = () => say(button.dataset.speech, button));
             document.querySelector('#prev').onclick = () => select(current - 1);
             document.querySelector('#next').onclick = () => select(current + 1);
             document.querySelector('#done').onclick = () => { state.done = state.done || {}; state.done[current] = !state.done[current]; persist(); render(); };
-            renderList(); progress();
+            renderList(); progress(); renderReview();
         }
-        function renderList() { document.querySelector("#days").innerHTML = days.map((d, i) => '<button class="day ' + (i === current ? 'active ' : '') + (state.done?.[i] ? 'done' : '') + '" data-i="' + i + '"><span class="num">' + (state.done?.[i] ? '✓' : i + 1) + '</span><span><b>Tuần ' + (d.week + 16) + '</b><small>' + escapeHtml(d.topic) + '</small></span></button>').join(""); document.querySelectorAll(".day").forEach(b => b.onclick = () => select(Number(b.dataset.i))) }
-        function progress() { const n = Object.keys(state.done || {}).filter(k => state.done[k]).length; document.querySelector("#progress").textContent = n + " / " + days.length + " ngày"; document.querySelector("#percent").textContent = Math.round(n / days.length * 100) + "%"; document.querySelector("#fill").style.width = (n / days.length * 100) + "%" }
+        function renderList() { document.querySelector("#days").innerHTML = days.map((d, i) => '<button class="day ' + (i === current ? 'active ' : '') + (state.done?.[i] ? 'done' : '') + '" data-i="' + i + '"><span class="num">' + (state.done?.[i] ? '✓' : i + 1) + '</span><span><b>Tuần ' + (d.week + 16) + '</b><small>' + escapeHtml(d.topic) + '</small><small>' + (state.practice?.[i]?.completedAt ? '✓ Đã ôn tập' : state.done?.[i] ? 'Đã học · Chưa ôn tập' : 'Chưa học') + '</small></span></button>').join(""); document.querySelectorAll(".day").forEach(b => b.onclick = () => select(Number(b.dataset.i))) }
+        function progress() { const n = Object.keys(state.done || {}).filter(k => state.done[k]).length; document.querySelector("#progress").textContent = n + " / " + days.length + " ngày đã học · " + Object.values(state.practice || {}).filter(r => r.completedAt).length + " đã ôn"; document.querySelector("#percent").textContent = Math.round(n / days.length * 100) + "%"; document.querySelector("#fill").style.width = (n / days.length * 100) + "%" }
         function persist() { localStorage.setItem(KEY, JSON.stringify(state)); progress(); renderList() }
         function select(i) { current = Math.max(0, Math.min(days.length - 1, i)); state.current = current; localStorage.setItem(KEY, JSON.stringify(state)); render() }
         if (Number.isFinite(Number(state.rate)) && Number(state.rate) >= .65 && Number(state.rate) <= 1.1) document.querySelector('#rate').value = state.rate;
