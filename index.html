@@ -257,6 +257,27 @@
             background: #eaf5ee
         }
 
+        .listen-icon {
+            width: 44px; height: 44px; padding: 10px; flex: 0 0 44px;
+            display: inline-flex; align-items: center; justify-content: center;
+        }
+        .listen-icon svg { width: 20px; height: 20px; }
+        .speak[aria-pressed="true"] { background: var(--green); color: white; }
+        button:focus-visible, select:focus-visible, summary:focus-visible {
+            outline: 3px solid var(--green); outline-offset: 3px;
+        }
+        button:disabled { opacity: .5; cursor: not-allowed; }
+        .row > div { min-width: 0; overflow-wrap: anywhere; }
+        .verb-pattern { margin-top: 10px; padding-top: 8px; border-top: 1px solid var(--line); }
+        .verb-pattern .row { padding: 0; background: transparent; }
+        .verb-pattern small { color: var(--muted); }
+        .translation { margin: 14px 0; }
+        .translation summary { cursor: pointer; color: var(--green); font-weight: 650; padding: 8px 0; }
+        .translation p { margin: 6px 0; line-height: 1.8; }
+        mark { background: var(--lime); color: var(--ink); padding: 0 3px; border-radius: 3px; }
+        .nav { gap: 8px; flex-wrap: wrap; }
+        .audio-status { margin: -10px 0 18px; color: var(--green); font-size: 13px; }
+        .audio-status:empty { display: none; }
         .formula {
             display: block;
             margin-top: 4px;
@@ -281,6 +302,8 @@
             padding: 16px;
             border-radius: 13px
         }
+
+        .row > .reading { margin: 0; padding: 0; min-width: 0; overflow-wrap: anywhere; }
 
         .tools {
             display: flex;
@@ -361,9 +384,9 @@
             động từ, câu mẫu có công thức, câu hỏi luyện nói và đoạn đọc cuối bài.</p>
         <div class="audio"><label>Giọng đọc <select id="voice">
                     <option>Đang tìm giọng tiếng Anh…</option>
-                </select></label><label>Tốc độ <input id="rate" type="range" min=".65" max="1.1" step=".05" value=".82">
-                <span id="rateLabel">0.82×</span></label><button class="speak" id="preview">▶ Nghe thử
-                giọng</button><span class="note">Danh sách giọng tùy theo trình duyệt và thiết bị.</span></div>
+                </select></label><label>Tốc độ <input id="rate" type="range" min=".65" max="1.1" step=".05" value=".80">
+                <span id="rateLabel">0.80×</span></label><button class="speak" id="preview">🔊 Nghe thử giọng</button><span class="note">Tối đa 4 giọng, ưu tiên Anh–Mỹ và Anh–Anh có sẵn trên thiết bị.</span></div>
+        <p id="audioStatus" class="audio-status" role="status" aria-live="polite"></p>
         <div class="layout">
             <aside class="panel">
                 <div class="phead"><span>Tuần 16–30</span><span id="percent">0%</span></div>
@@ -396,22 +419,194 @@
             { v: "WORK", title: "Phối hợp, giải pháp và tiến độ", grammar: "WORK + preposition diễn tả nhiệm vụ, cộng tác, mục tiêu hoặc cách xử lý.", words: "collaborate=phối hợp;workaround=cách khắc phục;goal=mục tiêu;progress=tiến độ;independently=độc lập;reliable=đáng tin;maintain=bảo trì;scope=phạm vi;estimate=ước lượng;dependency=phụ thuộc;review=đánh giá;approach=cách tiếp cận;constraint=ràng buộc;effort=nỗ lực;outcome=kết quả".split(";"), phrases: [["work on", "làm về", "I am working on the upload flow.", "S + work on + N."], ["work with", "làm việc cùng", "I work with designers and backend engineers.", "S + work with + person/team."], ["work out", "tìm ra / có kết quả", "We worked out a way to reduce loading time.", "S + work out + N."], ["work toward", "hướng tới", "We are working toward the release date.", "S + work toward + goal."], ["work around", "tìm cách vượt hạn chế", "We worked around the browser limitation.", "S + work around + N."], ["work through", "xử lý từng bước", "I worked through the review comments.", "S + work through + N."], ["work well with", "phối hợp tốt với", "This layout works well with long labels.", "S + work well with + N."]], topics: ["Building an upload flow", "Cross-functional teamwork", "Finding a performance solution", "Working toward a deadline", "Handling a platform limit", "Addressing review comments", "Checking responsive layouts"], sentences: ["I am working on the upload flow.", "I work with designers and backend engineers.", "We worked out a way to reduce loading time.", "We are working toward the release date.", "We worked around the browser limitation.", "I worked through the review comments.", "This layout works well with long labels."], forms: ["S + work on + N.", "S + work with + person/team.", "S + work out + N.", "S + work toward + goal.", "S + work around + N.", "S + work through + N.", "S + work well with + N."], prompts: ["What feature are you working on?", "Who do you work with most closely?", "How did you work out a solution?", "What goal is your team working toward?", "What limitation did you work around?", "How do you work through review comments?", "What design works well with mobile screens?"] },
             { v: "THINK", title: "Suy nghĩ, cân nhắc và nêu quan điểm", grammar: "THINK about/of/over/through kết hợp với chủ đề hoặc lựa chọn khác nhau.", words: "consider=cân nhắc;assumption=giả định;evidence=bằng chứng;option=lựa chọn;consequence=hệ quả;perspective=góc nhìn;reasonable=hợp lý;trade-off=đánh đổi;decide=quyết định;reflect=suy ngẫm;predict=dự đoán;alternative=phương án khác;concern=lo ngại;recommend=đề xuất;uncertain=không chắc".split(";"), phrases: [["think about", "nghĩ về", "I am thinking about a simpler design.", "S + think about + N/V-ing."], ["think of", "nảy ra / nghĩ về", "I can't think of a better example.", "S + think of + N."], ["think over", "cân nhắc kỹ", "Let's think over the proposal before we decide.", "S + think over + N."], ["think through", "suy xét kỹ", "We need to think through the edge cases.", "S + think through + N."], ["think ahead", "tính trước", "Good teams think ahead about maintenance.", "S + think ahead about + N."], ["think back to", "nhớ lại", "I think back to my first project.", "S + think back to + N."], ["think twice about", "cân nhắc lại", "Think twice about removing that validation.", "S + think twice about + N/V-ing."]], topics: ["Choosing a simpler design", "Finding an example", "Reviewing a proposal", "Considering edge cases", "Planning maintenance", "Reflecting on a project", "Reconsidering a risky change"], sentences: ["I am thinking about a simpler design.", "I can't think of a better example.", "Let's think over the proposal before we decide.", "We need to think through the edge cases.", "Good teams think ahead about maintenance.", "I think back to my first project.", "Think twice about removing that validation."], forms: ["S + think about + N/V-ing.", "S + think of + N.", "S + think over + N.", "S + think through + N.", "S + think ahead about + N.", "S + think back to + N.", "S + think twice about + N/V-ing."], prompts: ["What are you thinking about changing?", "Can you think of a useful example?", "What proposal should you think over?", "Which edge cases should the team think through?", "How can your team think ahead about maintenance?", "What do you think back to when solving this?", "What change should you think twice about?"] }
         ];
-        const commonWords = ["requirement=yêu cầu", "estimate=ước lượng", "feedback=góp ý", "approach=cách tiếp cận", "trade-off=đánh đổi", "release=bản phát hành", "review=xem xét", "impact=tác động", "concern=lo ngại", "result=kết quả", "maintain=bảo trì", "clarify=làm rõ", "improve=cải thiện", "challenge=thử thách", "solution=giải pháp"];
+        // Vietnamese counterparts of the seven daily sentences in each unit.
+        const translations = [
+            ["Tôi thức dậy lúc sáu giờ vào những ngày đi làm.", "Tôi chuẩn bị sẵn sàng trước khi ra khỏi nhà.", "Tôi đến chỗ làm bằng xe máy.", "Tôi hòa thuận với các đồng đội.", "Tôi đã vượt qua nỗi sợ nói tiếng Anh.", "Tôi sẽ quay lại công việc này sau bữa trưa.", "Tôi đang dần quen với việc nói tiếng Anh."],
+            ["Tôi bắt đầu chạy bộ vào năm ngoái.", "Tôi đổ rác mỗi tối.", "Tôi tham gia cuộc họp hằng ngày.", "Tôi phụ trách danh sách kiểm tra trước khi phát hành.", "Tôi có thể nhận thêm một nhiệm vụ.", "Cô ấy sẽ tiếp quản dự án.", "Chúng ta nên tính đến hạn chót."],
+            ["Chúng ta cần đưa ra quyết định hôm nay.", "Tôi đang tiến bộ trong việc học tiếng Anh.", "Hãy đảm bảo biểu mẫu đã được điền đầy đủ.", "Tôi đã ở lại muộn để bù lại sự chậm trễ.", "Chúng ta cần nghiên cứu thêm trước.", "Tôi sẽ cố hết sức trong buổi phỏng vấn.", "Hiện tại chúng ta có thể xoay xở mà không cần tính năng này."],
+            ["Hãy cùng xem lại các yêu cầu.", "Tôi đã xem kỹ nhật ký hệ thống.", "Chúng ta có thể tiến hành phát hành.", "Tôi đã quay lại thiết kế ban đầu.", "Hãy tiếp tục với mục tiếp theo.", "Trang mới sẽ được đưa vào hoạt động ngày mai.", "Việc triển khai đã diễn ra suôn sẻ."],
+            ["Cô ấy đã nghĩ ra một giải pháp đơn giản.", "Tôi tình cờ đọc được một bài viết hữu ích.", "Hãy quay lại câu hỏi này sau.", "Lựa chọn này phụ thuộc chủ yếu vào chi phí và thời gian.", "Bản cập nhật đã được phát hành tuần trước.", "Dự án đang tiến triển tốt.", "Cả nhóm đã chung sức giải quyết vấn đề."],
+            ["Quản lý đã cho tôi những góp ý hữu ích.", "Bạn có thể giúp tôi xử lý lỗi này không?", "Đừng bỏ cuộc khi cảm thấy việc nói tiếng Anh khó khăn.", "Tôi đã trả lại máy tính xách tay cho bộ phận CNTT.", "Hệ thống đưa ra một thông báo lỗi.", "Buổi demo đã tiết lộ quá nhiều chi tiết.", "Việc thiếu một bước kiểm tra có thể dẫn đến lỗi."],
+            ["Tôi theo kịp những thay đổi của React.", "Cô ấy tiếp tục luyện tập sau giờ làm.", "Chúng tôi theo dõi các lỗi chưa được xử lý.", "Hãy nhớ rằng hạn chót là thứ Sáu.", "Tôi giữ liên lạc với các đồng đội cũ.", "Hãy giữ dữ liệu kiểm thử tách biệt với môi trường thực tế.", "Tôi vẫn tiếp tục cố gắng ngay cả khi cảm thấy lo lắng."],
+            ["Chúng tôi đã hoãn cuộc họp đến thứ Hai.", "Tôi đã chuẩn bị một bản demo ngắn.", "Cô ấy đã đề xuất một ý tưởng thiết thực.", "Chúng tôi đã áp dụng quy trình mới vào thực tế.", "Hãy cất thiết bị kiểm thử đi.", "Nhóm đã phát hành một bản sửa lỗi khẩn cấp.", "Người dùng không nên phải chịu đựng những trang web chậm."],
+            ["Chúng tôi đã gặp một vấn đề trong quá trình kiểm thử.", "Máy chủ kiểm thử đã hết bộ nhớ.", "Hãy chạy thử luồng chính.", "Tôi đã trình bày ý tưởng với quản lý để xin ý kiến.", "Dịch vụ chạy trên Node.js.", "Chúng tôi đã gặp phải một giới hạn của nền tảng.", "Hãy xem lại danh sách kiểm tra thêm một lần nữa."],
+            ["Chúng tôi đang điều tra vấn đề đăng nhập.", "Tôi phụ trách bảo trì thành phần dùng chung.", "Chúng tôi đang tìm nguyên nhân gốc rễ.", "Tôi đã tra cứu phương thức API.", "Tôi mong được học hỏi từ cả nhóm.", "Hãy chú ý các phản hồi API rỗng.", "Khi nhìn lại, tôi xem đợt phát hành đó là một bài học hữu ích."],
+            ["Chúng tôi đã từ chối yêu cầu vì nó nằm ngoài phạm vi công việc.", "Cách sửa hóa ra lại đơn giản.", "Nhiệm vụ nhỏ đã trở thành một dự án lớn hơn.", "Tôi đã tìm đến đồng đội để xin lời khuyên.", "Hãy bật ghi nhật ký gỡ lỗi cho lần kiểm thử này.", "Chúng tôi đã tắt cờ tính năng cũ.", "Nhóm đã nhanh chóng xoay chuyển tình hình của đợt phát hành."],
+            ["Tôi xử lý các lỗi do người dùng báo trước.", "Chúng ta cần ứng phó với lưu lượng truy cập cao hơn.", "Hãy giải quyết vấn đề kiểm tra tính hợp lệ của dữ liệu.", "Chúng tôi đã lần lượt xử lý các ca kiểm thử bị lỗi.", "Chúng tôi đã chốt chọn cách tiếp cận đơn giản hơn.", "Chúng tôi đã gặp phải một giới hạn của trình duyệt.", "Bản vá đã giải quyết lỗi hết thời gian chờ."],
+            ["Chúng tôi đã trao đổi về kế hoạch phát hành.", "Tôi đã trao đổi với người thiết kế về khoảng cách giữa các thành phần.", "Hãy thảo luận kỹ hai phương án.", "Tôi đã hướng dẫn cả nhóm từng bước thiết lập.", "Hãy lên tiếng nếu bạn nhận thấy rủi ro.", "Cô ấy đã nêu ra một mối lo về khả năng tiếp cận.", "Tôi đã cố truyền đạt rõ ràng ý của mình."],
+            ["Tôi đang làm luồng tải tệp lên.", "Tôi làm việc cùng các nhà thiết kế và kỹ sư backend.", "Chúng tôi đã tìm ra cách giảm thời gian tải.", "Chúng tôi đang nỗ lực để kịp ngày phát hành.", "Chúng tôi đã tìm cách khắc phục giới hạn của trình duyệt.", "Tôi đã lần lượt xử lý các nhận xét khi rà soát.", "Bố cục này phù hợp với các nhãn dài."],
+            ["Tôi đang nghĩ về một thiết kế đơn giản hơn.", "Tôi không nghĩ ra được ví dụ nào hay hơn.", "Hãy cân nhắc kỹ đề xuất trước khi quyết định.", "Chúng ta cần suy xét kỹ các trường hợp biên.", "Những nhóm làm việc tốt luôn tính trước đến việc bảo trì.", "Tôi nhớ lại dự án đầu tiên của mình.", "Hãy cân nhắc kỹ trước khi bỏ bước kiểm tra tính hợp lệ đó."]
+        ];
+        // One extra word per week, revisited in the daily reading for reinforcement.
+        const readingExtras = [
+            ["consistency", "sự đều đặn", "Consistency helps me build better habits.", "Sự đều đặn giúp tôi hình thành những thói quen tốt hơn."],
+            ["commitment", "sự cam kết", "Commitment helps me finish what I start.", "Sự cam kết giúp tôi hoàn thành những việc đã bắt đầu."],
+            ["worthwhile", "đáng công sức", "Learning from each task makes the effort worthwhile.", "Học hỏi từ mỗi nhiệm vụ khiến công sức bỏ ra trở nên xứng đáng."],
+            ["milestone", "cột mốc", "Each milestone helps us see how far we have come.", "Mỗi cột mốc giúp chúng tôi thấy mình đã đi được bao xa."],
+            ["insight", "sự thấu hiểu / hiểu biết sâu sắc", "A useful insight can change the way we see a problem.", "Một hiểu biết sâu sắc hữu ích có thể thay đổi cách chúng ta nhìn nhận vấn đề."],
+            ["encouragement", "sự động viên", "A little encouragement can help a teammate keep trying.", "Một chút động viên có thể giúp đồng đội tiếp tục cố gắng."],
+            ["persistence", "sự kiên trì", "Persistence helps me improve even when progress is slow.", "Sự kiên trì giúp tôi tiến bộ ngay cả khi tiến độ còn chậm."],
+            ["practical", "thiết thực", "A practical plan makes the next step easier.", "Một kế hoạch thiết thực giúp bước tiếp theo dễ dàng hơn."],
+            ["bottleneck", "điểm nghẽn", "We check for a bottleneck before adding more resources.", "Chúng tôi kiểm tra xem có điểm nghẽn không trước khi bổ sung tài nguyên."],
+            ["thorough", "kỹ lưỡng", "A thorough check helps us avoid missing important details.", "Việc kiểm tra kỹ lưỡng giúp chúng tôi không bỏ sót những chi tiết quan trọng."],
+            ["adaptable", "có khả năng thích nghi", "An adaptable team can respond well to change.", "Một nhóm có khả năng thích nghi có thể ứng phó tốt với thay đổi."],
+            ["feasible", "khả thi", "We choose a feasible solution that fits our time and budget.", "Chúng tôi chọn một giải pháp khả thi phù hợp với thời gian và ngân sách."],
+            ["concise", "ngắn gọn, súc tích", "A concise explanation helps everyone understand the main point.", "Lời giải thích ngắn gọn giúp mọi người hiểu ý chính."],
+            ["alignment", "sự thống nhất", "Alignment on our goals helps the team work together.", "Sự thống nhất về mục tiêu giúp cả nhóm phối hợp với nhau."],
+            ["foresight", "khả năng nhìn xa", "Foresight helps us prepare for future challenges.", "Khả năng nhìn xa giúp chúng tôi chuẩn bị cho những thử thách trong tương lai."]
+        ];
+        // Only genuine verb patterns; nouns and verbs taking a direct object are not forced into a pattern.
+        const verbPatterns = {
+            retry: ["retry + danh từ (không cần giới từ)", "thử lại", "Please retry the request.", "Hãy thử gửi lại yêu cầu."],
+            interrupt: ["interrupt + người + with + nội dung", "ngắt lời ai để nói điều gì", "May I interrupt you with a question?", "Tôi có thể ngắt lời bạn để hỏi một câu không?"],
+            commute: ["commute to + nơi làm việc", "đi làm đến một nơi", "I commute to work by bus.", "Tôi đi làm bằng xe buýt."],
+            adjust: ["adjust to + danh từ / V-ing", "thích nghi với", "I adjust to working with a new team.", "Tôi thích nghi với việc làm cùng một nhóm mới."],
+            recover: ["recover from + danh từ", "hồi phục sau / vượt qua", "I need time to recover from the flu.", "Tôi cần thời gian để hồi phục sau đợt cúm."],
+            research: ["research + chủ đề (không cần giới từ)", "nghiên cứu về (khi dùng như động từ)", "We research the causes of delays.", "Chúng tôi nghiên cứu nguyên nhân gây chậm trễ."],
+            look: ["look at + danh từ", "nhìn / xem", "Look at this example.", "Hãy xem ví dụ này."],
+            investigate: ["investigate + danh từ (không cần giới từ)", "điều tra một vấn đề", "We investigate the issue.", "Chúng tôi điều tra vấn đề."],
+            cope: ["cope with + danh từ", "đối phó với", "We cope with unexpected changes.", "Chúng tôi ứng phó với những thay đổi bất ngờ."],
+            resolve: ["resolve + danh từ (không cần giới từ)", "giải quyết một vấn đề", "We resolve the issue together.", "Chúng tôi cùng nhau giải quyết vấn đề."],
+            sort: ["sort by + tiêu chí", "sắp xếp theo", "We sort by priority.", "Chúng tôi sắp xếp theo mức độ ưu tiên."],
+            settle: ["settle on + danh từ", "chốt chọn", "We settled on a simple plan.", "Chúng tôi đã chốt chọn một kế hoạch đơn giản."],
+            escalate: ["escalate + vấn đề + to + người / nhóm", "chuyển vấn đề lên cấp xử lý cao hơn", "I escalate the issue to my manager.", "Tôi chuyển vấn đề lên quản lý để xử lý."],
+            clarify: ["clarify + nội dung + with + người", "làm rõ với ai", "I clarify the requirements with the client.", "Tôi làm rõ các yêu cầu với khách hàng."],
+            explain: ["explain + nội dung + to + người", "giải thích cho ai", "I explain the process to my teammate.", "Tôi giải thích quy trình cho đồng đội."],
+            discuss: ["discuss + danh từ (không dùng about)", "thảo luận về", "We discuss the release plan.", "Chúng tôi thảo luận về kế hoạch phát hành."],
+            present: ["present + nội dung + to + người", "trình bày với ai", "I present the idea to the team.", "Tôi trình bày ý tưởng với cả nhóm."],
+            collaborate: ["collaborate with + người / on + công việc", "phối hợp với ai / trong việc gì", "I collaborate with designers on this project.", "Tôi phối hợp với các nhà thiết kế trong dự án này."],
+            maintain: ["maintain + danh từ (không cần giới từ)", "duy trì / bảo trì", "We maintain the shared code.", "Chúng tôi bảo trì mã nguồn dùng chung."],
+            consider: ["consider + danh từ / V-ing (không cần giới từ)", "cân nhắc", "We consider changing the design.", "Chúng tôi cân nhắc thay đổi thiết kế."],
+            decide: ["decide on + danh từ", "quyết định chọn", "We decide on the best option.", "Chúng tôi quyết định chọn phương án tốt nhất."],
+            reflect: ["reflect on + danh từ", "suy ngẫm về", "I reflect on what I learned.", "Tôi suy ngẫm về những gì mình đã học."],
+            predict: ["predict + danh từ (không cần giới từ)", "dự đoán", "We predict the result.", "Chúng tôi dự đoán kết quả."],
+            recommend: ["recommend + thứ gì + to + người", "đề xuất / giới thiệu cho ai", "I recommend this book to my teammate.", "Tôi giới thiệu cuốn sách này cho đồng đội."]
+        };
         const days = units.flatMap((u, wi) => u.phrases.map((p, di) => ({ week: wi, di, unit: u, phrase: p, topic: u.topics[di], sentence: u.sentences[di], form: u.forms[di], prompt: u.prompts[di] })));
         const KEY = "english-path-16-30-v1"; let state = {}; try { state = JSON.parse(localStorage.getItem(KEY) || "{}") } catch { } let current = Math.min(Math.max(Number(state.current) || 0, 0), days.length - 1);
         const escapeHtml = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
-        let englishVoices = [], activeVoice = null; function refreshVoices() { const el = document.querySelector("#voice"); if (!el || !("speechSynthesis" in window)) return; englishVoices = speechSynthesis.getVoices().filter(v => v.lang.toLowerCase().startsWith("en")); el.innerHTML = englishVoices.length ? englishVoices.map((v, i) => '<option value="' + i + '">' + escapeHtml(v.name) + " · " + escapeHtml(v.lang) + "</option>").join("") : '<option value="">No English voice found</option>'; activeVoice = englishVoices[0] || null; el.onchange = () => activeVoice = englishVoices[Number(el.value)] || null }
-        function say(text, button) { if (!("speechSynthesis" in window)) { button.textContent = "Voice unavailable"; return } speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(text); u.lang = activeVoice?.lang || "en-US"; u.voice = activeVoice; u.rate = Number(document.querySelector("#rate").value); button.textContent = "▶ Playing"; u.onend = () => button.textContent = "🔊 Listen"; u.onerror = () => button.textContent = "🔊 Listen"; speechSynthesis.speak(u) }
-        function audioButton(text, label) { const b = document.createElement("button"); b.className = "speak"; b.textContent = label || "🔊 Listen"; b.onclick = () => say(text, b); return b }
+        let englishVoices = [], activeVoice = null, playing = null;
+        const speakerIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15 8a6 6 0 0 1 0 8M18 5a10 10 0 0 1 0 14"/></svg>';
+        const voiceKey = v => v.voiceURI || v.name + ':' + v.lang;
+        function shortlistVoices(voices) {
+            const english = voices.filter(v => /^en(?:[-_]|$)/i.test(v.lang));
+            const familiarName = /Samantha|Daniel|Karen|Alex|Moira|Tessa|Google US English|Google UK English|Microsoft (Aria|Jenny|Guy|Sonia|Ryan)|Natural|Premium|Enhanced/i;
+            const score = v => (/en[-_](US|GB)/i.test(v.lang) ? 100 : 0)
+                + (familiarName.test(v.name) ? 40 : 0)
+                + (v.default ? 5 : 0);
+            const ranked = english.filter(v => !/Zarvox|Trinoids|Bells|Boing|Bubbles|Bad News|Good News|Organ|Whisper|Wobble|Jester|Cellos|Bahh/i.test(v.name))
+                .sort((a, b) => score(b) - score(a) || a.name.localeCompare(b.name));
+            const unique = ranked.filter((v, i, all) => all.findIndex(x => x.name === v.name && x.lang === v.lang) === i);
+            const chosen = ['en-US', 'en-GB'].map(lang => unique.find(v => v.lang.replace('_', '-').toLowerCase() === lang.toLowerCase())).filter(Boolean);
+            const familiar = unique.filter(v => familiarName.test(v.name));
+            const shortlist = [...chosen, ...familiar.filter(v => !chosen.includes(v))];
+            return (shortlist.length ? shortlist : unique.slice(0, 2)).slice(0, 4);
+        }
+        function refreshVoices() {
+            const el = document.querySelector('#voice');
+            if (!('speechSynthesis' in window)) {
+                el.innerHTML = '<option>Thiết bị chưa hỗ trợ giọng đọc</option>'; el.disabled = true;
+                document.querySelectorAll('.speak').forEach(b => b.disabled = true);
+                document.querySelector('#audioStatus').textContent = 'Trình duyệt này chưa hỗ trợ đọc tiếng Anh.';
+                return;
+            }
+            const preferred = state.voice || (activeVoice && voiceKey(activeVoice));
+            englishVoices = shortlistVoices(speechSynthesis.getVoices());
+            el.innerHTML = englishVoices.length ? englishVoices.map((v, i) => '<option value="' + i + '">' + escapeHtml(v.name) + ' · ' + (/en[-_]US/i.test(v.lang) ? 'Anh–Mỹ' : /en[-_]GB/i.test(v.lang) ? 'Anh–Anh' : escapeHtml(v.lang)) + '</option>').join('') : '<option>Giọng tiếng Anh mặc định</option>';
+            activeVoice = englishVoices.find(v => voiceKey(v) === preferred) || englishVoices[0] || null;
+            el.value = activeVoice ? String(englishVoices.indexOf(activeVoice)) : '';
+            el.disabled = !englishVoices.length;
+            el.onchange = () => { stopSpeech(); activeVoice = englishVoices[Number(el.value)] || null; state.voice = activeVoice && voiceKey(activeVoice); persist(); };
+        }
+        function stopSpeech() {
+            if (playing) { playing.button.setAttribute('aria-pressed', 'false'); playing = null; }
+            if ('speechSynthesis' in window) speechSynthesis.cancel();
+            document.querySelector('#audioStatus').textContent = '';
+        }
+        function say(text, button) {
+            if (!('speechSynthesis' in window)) {
+                document.querySelector('#audioStatus').textContent = 'Trình duyệt này chưa hỗ trợ giọng đọc.'; return;
+            }
+            const wasPlaying = playing?.button === button;
+            stopSpeech();
+            if (wasPlaying) return;
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = activeVoice?.lang || 'en-US';
+            if (activeVoice) utterance.voice = activeVoice;
+            utterance.rate = Number(document.querySelector('#rate').value);
+            playing = { button, utterance };
+            button.setAttribute('aria-pressed', 'true');
+            document.querySelector('#audioStatus').textContent = 'Đang đọc. Bấm lại nút loa để dừng.';
+            const finish = error => {
+                if (playing?.utterance !== utterance) return;
+                button.setAttribute('aria-pressed', 'false'); playing = null;
+                document.querySelector('#audioStatus').textContent = error ? 'Không phát được giọng đọc. Hãy chọn giọng khác hoặc thử lại.' : '';
+            };
+            utterance.onend = () => finish(false);
+            utterance.onerror = e => finish(!['canceled', 'interrupted'].includes(e.error));
+            try { speechSynthesis.speak(utterance); } catch { finish(true); }
+        }
+        function listen(text) {
+            return '<button type="button" class="speak listen-icon" data-speech="' + escapeHtml(text) + '" aria-label="Nghe: ' + escapeHtml(text) + '" title="Nghe phát âm" aria-pressed="false"' + (!('speechSynthesis' in window) ? ' disabled' : '') + '>' + speakerIcon + '</button>';
+        }
+        function learningRow(text, meaning, extra = '') {
+            return '<div class="row"><div><strong lang="en">' + escapeHtml(text) + '</strong><span>' + escapeHtml(meaning) + '</span>' + extra + '</div>' + listen(text) + '</div>';
+        }
         function render() {
-            const d = days[current], u = d.unit, words = u.words; const vocab = Array.from({ length: 5 }, (_, j) => words[(d.di * 2 + j) % words.length]); document.querySelector("#lesson").innerHTML = '<div class="eyebrow">Tuần ' + (d.week + 16) + ' · ' + escapeHtml(u.v) + '</div><h2>Ngày ' + (d.week * 7 + d.di + 1) + ': ' + escapeHtml(d.topic) + '</h2><p class="goal">' + escapeHtml(u.title) + ' · ' + escapeHtml(u.grammar) + '</p><div class="block"><h3>5 từ vựng theo chủ đề</h3>' + vocab.map(x => { const [a, b] = x.split("="); return '<div class="row"><div><strong>' + escapeHtml(a) + '</strong><span>' + escapeHtml(b) + '</span></div></div>' }).join("") + '<p class="note">Ôn lặp có chủ đích: nhóm từ được nhắc lại trong tuần để giúp bạn nhớ lâu hơn.</p></div><div class="block"><h3>Cụm từ phổ biến với ' + escapeHtml(u.v) + '</h3>' + u.phrases.map((x, i) => { const [a, b, c, f] = x; return '<div class="row"><div><strong>' + escapeHtml(a) + (i === d.di ? ' · Hôm nay' : '') + '</strong><span>' + escapeHtml(b) + '</span></div>' + (i === d.di ? '<span class="tag"></span>' : '') + '</div>' }).join("") + '</div><div class="block"><h3>Câu mẫu và cấu trúc</h3><div class="row"><div><strong>' + escapeHtml(d.sentence) + '</strong><span class="formula">' + escapeHtml(d.form) + '</span></div></div></div><div class="block"><h3>Đến lượt bạn</h3><div class="prompt"><b>' + escapeHtml(d.prompt) + '</b><p class="note">Trả lời bằng 2–3 câu. Dùng cụm từ hôm nay nếu có thể.</p></div></div><div class="block"><h3>Đoạn đọc cuối ngày</h3><p class="reading" id="passage"></p><button id="readPassage" class="speak">🔊 Nghe đoạn đọc</button><p class="note">Nghe một lần, đọc theo một lần, sau đó thử kể lại bằng lời của bạn.</p></div><div class="nav"><button class="btn" id="prev" ' + (current === 0 ? 'disabled' : '') + '>← Bài trước</button><button class="btn" id="done">' + (state.done?.[current] ? '✓ Đã luyện' : 'Đánh dấu đã luyện') + '</button><button class="btn" id="next" ' + (current === days.length - 1 ? 'disabled' : '') + '>Bài tiếp →</button></div>';
-            const passage = d.sentence + " I use this expression in daily life or at work. It helps me explain the situation clearly and share the next step."; document.querySelector("#passage").textContent = passage; document.querySelector("#readPassage").onclick = e => say(passage, e.currentTarget); document.querySelector("#prev").onclick = () => select(current - 1); document.querySelector("#next").onclick = () => select(current + 1); document.querySelector("#done").onclick = () => { state.done = state.done || {}; state.done[current] = !state.done[current]; persist(); render() }; renderList(); progress()
+            stopSpeech();
+            const d = days[current], u = d.unit;
+            const vocab = Array.from({ length: 5 }, (_, j) => u.words[(d.di * 2 + j) % u.words.length]);
+            const [newWord, newMeaning, extraSentence, extraTranslation] = readingExtras[d.week];
+            const passage = d.sentence + ' ' + extraSentence;
+            const translation = translations[d.week][d.di] + ' ' + extraTranslation;
+            const highlighted = escapeHtml(passage).replace(new RegExp('\\b' + newWord + '\\b', 'i'), match => '<mark>' + match + '</mark>');
+            document.querySelector('#lesson').innerHTML = `
+                <div class="eyebrow">Tuần ${d.week + 16} · ${escapeHtml(u.v)}</div>
+                <h2>Ngày ${current + 1}: ${escapeHtml(d.topic)}</h2>
+                <p class="goal">${escapeHtml(u.title)} · ${escapeHtml(u.grammar)}</p>
+                <div class="block"><h3>5 từ vựng theo chủ đề</h3>
+                    ${vocab.map(entry => {
+                        const [word, meaning] = entry.split('=').map(x => x.trim());
+                        const pattern = verbPatterns[word];
+                        const extra = pattern ? '<div class="verb-pattern"><small>Cách dùng khi là động từ</small><span>' + escapeHtml(pattern[0]) + ' · ' + escapeHtml(pattern[1]) + '</span>' + learningRow(pattern[2], pattern[3]) + '</div>' : '';
+                        return learningRow(word, meaning, extra);
+                    }).join('')}
+                    <p class="note">Bấm loa để nghe từng từ hoặc câu ví dụ. N = danh từ; V-ing = động từ thêm -ing. Các từ được ôn lại trong tuần.</p>
+                </div>
+                <div class="block"><h3>Cụm từ phổ biến với ${escapeHtml(u.v)}</h3>
+                    ${u.phrases.map(([phrase, meaning], i) => learningRow(phrase, meaning, i === d.di ? '<span class="note">Cụm từ hôm nay</span>' : '')).join('')}
+                </div>
+                <div class="block"><h3>Câu mẫu và cấu trúc</h3>
+                    ${learningRow(d.sentence, translations[d.week][d.di], '<span class="formula">' + escapeHtml(d.form) + '</span>')}
+                </div>
+                <div class="block"><h3>Đến lượt bạn</h3><div class="prompt">
+                    ${learningRow(d.prompt, '')}
+                    <p class="note">Trả lời bằng 2–3 câu. Dùng cụm từ hôm nay nếu có thể.</p>
+                </div></div>
+                <div class="block"><h3>Đoạn đọc cuối ngày</h3>
+                    <div class="row"><p class="reading" id="passage" lang="en">${highlighted}</p>${listen(passage)}</div>
+                    <details class="translation"><summary>Xem bản dịch tiếng Việt</summary><p>${escapeHtml(translation)}</p></details>
+                    <h3>Học thêm một từ</h3>${learningRow(newWord, newMeaning)}
+                    <p class="note">Từ được tô màu trong đoạn đọc sẽ được ôn lại suốt tuần. Nghe, đọc theo rồi thử kể lại bằng lời của bạn.</p>
+                </div>
+                <div class="nav">
+                    <button class="btn" id="prev" ${current === 0 ? 'disabled' : ''}>← Bài trước</button>
+                    <button class="btn" id="done">${state.done?.[current] ? '✓ Đã luyện' : 'Đánh dấu đã luyện'}</button>
+                    <button class="btn" id="next" ${current === days.length - 1 ? 'disabled' : ''}>Bài tiếp →</button>
+                </div>`;
+            document.querySelectorAll('[data-speech]').forEach(button => button.onclick = () => say(button.dataset.speech, button));
+            document.querySelector('#prev').onclick = () => select(current - 1);
+            document.querySelector('#next').onclick = () => select(current + 1);
+            document.querySelector('#done').onclick = () => { state.done = state.done || {}; state.done[current] = !state.done[current]; persist(); render(); };
+            renderList(); progress();
         }
         function renderList() { document.querySelector("#days").innerHTML = days.map((d, i) => '<button class="day ' + (i === current ? 'active ' : '') + (state.done?.[i] ? 'done' : '') + '" data-i="' + i + '"><span class="num">' + (state.done?.[i] ? '✓' : i + 1) + '</span><span><b>Tuần ' + (d.week + 16) + '</b><small>' + escapeHtml(d.topic) + '</small></span></button>').join(""); document.querySelectorAll(".day").forEach(b => b.onclick = () => select(Number(b.dataset.i))) }
         function progress() { const n = Object.keys(state.done || {}).filter(k => state.done[k]).length; document.querySelector("#progress").textContent = n + " / " + days.length + " ngày"; document.querySelector("#percent").textContent = Math.round(n / days.length * 100) + "%"; document.querySelector("#fill").style.width = (n / days.length * 100) + "%" }
         function persist() { localStorage.setItem(KEY, JSON.stringify(state)); progress(); renderList() }
         function select(i) { current = Math.max(0, Math.min(days.length - 1, i)); state.current = current; localStorage.setItem(KEY, JSON.stringify(state)); render() }
-        document.querySelector("#rate").oninput = e => document.querySelector("#rateLabel").textContent = Number(e.target.value).toFixed(2) + "×"; document.querySelector("#preview").onclick = e => say("Hello. This is a preview of the selected English voice.", e.currentTarget); refreshVoices(); if ("speechSynthesis" in window) speechSynthesis.onvoiceschanged = refreshVoices; render();
+        if (Number.isFinite(Number(state.rate)) && Number(state.rate) >= .65 && Number(state.rate) <= 1.1) document.querySelector('#rate').value = state.rate;
+        document.querySelector('#rateLabel').textContent = Number(document.querySelector('#rate').value).toFixed(2) + '×';
+        document.querySelector('#rate').oninput = e => { document.querySelector('#rateLabel').textContent = Number(e.target.value).toFixed(2) + '×'; state.rate = Number(e.target.value); persist(); }; document.querySelector("#preview").onclick = e => say("Hello. This is a preview of the selected English voice.", e.currentTarget); refreshVoices(); if ("speechSynthesis" in window) speechSynthesis.onvoiceschanged = refreshVoices; render();
     </script>
 </body>
 
