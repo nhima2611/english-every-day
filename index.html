@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>English mỗi ngày · Tuần 16–30</title>
+    <title>English mỗi ngày · Ngày 1–105</title>
     <style>
         :root {
             --ink: #1d2b34;
@@ -295,6 +295,11 @@
             padding: 15px
         }
 
+        .prompt label { display: block; font-weight: 650; margin: 14px 0 6px; }
+        .prompt textarea { display: block; width: 100%; min-height: 110px; resize: vertical; border: 1px solid #cbbfae; border-radius: 9px; padding: 11px 12px; background: #fff; font: inherit; }
+        .prompt textarea:focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
+        .daily-target { margin: 12px 0 0; font-weight: 650; color: #34584e; }
+
         .reading {
             font-size: 17px;
             line-height: 1.8;
@@ -404,9 +409,9 @@
             <div class="brand">English, one day at a time</div>
             <div class="progress" id="progress">0 / 105 ngày</div>
         </div>
-        <h1>Tiếp tục từ tuần 16.<br>Nói rõ hơn mỗi ngày.</h1>
-        <p class="sub">Lộ trình mới kéo dài 15 tuần, từ tuần 16 đến 30. Mỗi bài có 5 từ theo chủ đề, nhóm cụm từ cùng
-            động từ, câu mẫu có công thức, câu hỏi luyện nói và đoạn đọc cuối bài.</p>
+        <h1>Ngày 1 bắt đầu ở đây.<br>Nói rõ hơn mỗi ngày.</h1>
+        <p class="sub">Lộ trình gồm 105 ngày học liên tiếp. Mỗi bài có 5 từ theo chủ đề, nhóm cụm từ cùng
+            động từ, một mẫu ngữ pháp để tự kiểm tra, câu hỏi luyện nói và đoạn đọc cuối bài.</p>
         <div class="audio"><label>Giọng đọc <select id="voice">
                     <option>Đang tìm giọng tiếng Anh…</option>
                 </select></label><label>Tốc độ <input id="rate" type="range" min=".65" max="1.1" step=".05" value=".80">
@@ -415,7 +420,7 @@
         <section id="studyTools" class="study-tools" aria-label="Lịch ôn và sao lưu"></section>
         <div class="layout">
             <aside class="panel">
-                <div class="phead"><span>Tuần 16–30</span><span id="percent">0%</span></div>
+                <div class="phead"><span>Ngày 1–105</span><span id="percent">0%</span></div>
                 <div class="bar"><i id="fill"></i></div>
                 <div class="days" id="days"></div>
             </aside>
@@ -426,6 +431,8 @@
     </main>
     <script src="practice-data.js"></script>
     <script src="learning-storage.js"></script>
+    <script src="daily-lessons.js"></script>
+    <script src="grammar-lessons.js"></script>
     <script src="review.js"></script>
     <script>
         const units = [
@@ -466,7 +473,7 @@
             ["Tôi đang làm luồng tải tệp lên.", "Tôi làm việc cùng các nhà thiết kế và kỹ sư backend.", "Chúng tôi đã tìm ra cách giảm thời gian tải.", "Chúng tôi đang nỗ lực để kịp ngày phát hành.", "Chúng tôi đã tìm cách khắc phục giới hạn của trình duyệt.", "Tôi đã lần lượt xử lý các nhận xét khi rà soát.", "Bố cục này phù hợp với các nhãn dài."],
             ["Tôi đang nghĩ về một thiết kế đơn giản hơn.", "Tôi không nghĩ ra được ví dụ nào hay hơn.", "Hãy cân nhắc kỹ đề xuất trước khi quyết định.", "Chúng ta cần suy xét kỹ các trường hợp biên.", "Những nhóm làm việc tốt luôn tính trước đến việc bảo trì.", "Tôi nhớ lại dự án đầu tiên của mình.", "Hãy cân nhắc kỹ trước khi bỏ bước kiểm tra tính hợp lệ đó."]
         ];
-        // One extra word per week, revisited in the daily reading for reinforcement.
+        // One extra word per seven-day topic group, revisited in the daily reading.
         const readingExtras = [
             ["consistency", "sự đều đặn", "Consistency helps me build better habits.", "Sự đều đặn giúp tôi hình thành những thói quen tốt hơn."],
             ["commitment", "sự cam kết", "Commitment helps me finish what I start.", "Sự cam kết giúp tôi hoàn thành những việc đã bắt đầu."],
@@ -514,6 +521,8 @@
         const days = units.flatMap((u, wi) => u.phrases.map((p, di) => ({ week: wi, di, unit: u, phrase: p, topic: u.topics[di], sentence: u.sentences[di], form: u.forms[di], prompt: u.prompts[di] })));
         const KEY = "english-path-16-30-v1"; let state = {}; try { state = JSON.parse(localStorage.getItem(KEY) || "{}") } catch { } let current = Math.min(Math.max(Number(state.current) || 0, 0), days.length - 1);
         const escapeHtml = s => String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+        const dailyTargetWords = day => 12 + day;
+        const countEnglishWords = text => (String(text).match(/[A-Za-z]+(?:['’-][A-Za-z]+)*/g) || []).length;
         let englishVoices = [], activeVoice = null, playing = null;
         const speakerIcon = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M11 5 6 9H3v6h3l5 4z"/><path d="M15 8a6 6 0 0 1 0 8M18 5a10 10 0 0 1 0 14"/></svg>';
         const voiceKey = v => v.voiceURI || v.name + ':' + v.lang;
@@ -584,13 +593,17 @@
         function render() {
             stopSpeech();
             const d = days[current], u = d.unit;
-            const vocab = Array.from({ length: 5 }, (_, j) => u.words[(d.di * 2 + j) % u.words.length]);
+            const vocab = lessonVocabulary(current).map(pair => pair.join('='));
             const [newWord, newMeaning, extraSentence, extraTranslation] = readingExtras[d.week];
-            const passage = d.sentence + ' ' + extraSentence;
-            const translation = translations[d.week][d.di] + ' ' + extraTranslation;
+            const reading = lessonReading(current);
+            const grammar = grammarForDay(current);
+            const writing = state.writing?.[current] || '';
+            const targetWords = dailyTargetWords(current);
+            const passage = reading.english;
+            const translation = reading.vietnamese;
             const highlighted = escapeHtml(passage).replace(new RegExp('\\b' + newWord + '\\b', 'i'), match => '<mark>' + match + '</mark>');
             document.querySelector('#lesson').innerHTML = `
-                <div class="eyebrow">Tuần ${d.week + 16} · ${escapeHtml(u.v)}</div>
+                <div class="eyebrow">Ngày ${current + 1} / ${days.length} · ${escapeHtml(u.v)}</div>
                 <h2>Ngày ${current + 1}: ${escapeHtml(d.topic)}</h2>
                 <p class="goal">${escapeHtml(u.title)} · ${escapeHtml(u.grammar)}</p>
                 <div class="block"><h3>5 từ vựng theo chủ đề</h3>
@@ -600,7 +613,7 @@
                         const extra = pattern ? '<div class="verb-pattern"><small>Cách dùng khi là động từ</small><span>' + escapeHtml(pattern[0]) + ' · ' + escapeHtml(pattern[1]) + '</span>' + learningRow(pattern[2], pattern[3]) + '</div>' : '';
                         return learningRow(word, meaning, extra);
                     }).join('')}
-                    <p class="note">Bấm loa để nghe từng từ hoặc câu ví dụ. N = danh từ; V-ing = động từ thêm -ing. Các từ được ôn lại trong tuần.</p>
+                    <p class="note">Bấm loa để nghe từng từ hoặc câu ví dụ. N = danh từ; V-ing = động từ thêm -ing. Các từ được ôn lại trong những ngày tiếp theo.</p>
                 </div>
                 <div class="block"><h3>Cụm từ phổ biến với ${escapeHtml(u.v)}</h3>
                     ${u.phrases.map(([phrase, meaning], i) => learningRow(phrase, meaning, i === d.di ? '<span class="note">Cụm từ hôm nay</span>' : '')).join('')}
@@ -608,15 +621,29 @@
                 <div class="block"><h3>Câu mẫu và cấu trúc</h3>
                     ${learningRow(d.sentence, translations[d.week][d.di], '<span class="formula">' + escapeHtml(d.form) + '</span>')}
                 </div>
+                <div class="block"><h3>Ngữ pháp mở rộng · ${escapeHtml(grammar.title)}</h3>
+                    <p>${escapeHtml(grammar.rule)}</p>
+                    <p class="formula">${escapeHtml(grammar.formula)}</p>
+                    ${learningRow(grammar.example, grammar.translation)}
+                    <details class="translation"><summary>Tự kiểm tra: điền vào chỗ trống</summary>
+                        <p lang="en">${escapeHtml(blankWord(grammar.example, grammar.answer))}</p>
+                        <details><summary>Xem đáp án</summary><p lang="en"><strong>${escapeHtml(grammar.answer)}</strong></p></details>
+                    </details>
+                    <p class="note">Mẫu câu này sẽ xuất hiện trong phần ôn bài ngày mai.</p>
+                </div>
                 <div class="block"><h3>Đến lượt bạn</h3><div class="prompt">
                     ${learningRow(d.prompt, '')}
-                    <p class="note">Trả lời bằng 2–3 câu. Dùng cụm từ hôm nay nếu có thể.</p>
+                    <p class="daily-target">Mục tiêu Ngày ${current + 1}: trả lời ít nhất ${targetWords} từ tiếng Anh${current ? ' · hơn ngày trước 1 từ' : ''}.</p>
+                    <p class="note">Dùng cụm từ hôm nay và thử áp dụng mẫu ${escapeHtml(grammar.title.toLowerCase())}. Bạn có thể nói thành tiếng hoặc viết bên dưới để theo dõi số từ.</p>
+                    <label for="dailyAnswer">Viết thử câu trả lời của bạn</label>
+                    <textarea id="dailyAnswer" lang="en" maxlength="2000" spellcheck="true" placeholder="Viết bằng tiếng Anh; câu trả lời được lưu trên thiết bị này.">${escapeHtml(writing)}</textarea>
+                    <p id="dailyWordCount" class="note" role="status">${countEnglishWords(writing)} / ${targetWords} từ${countEnglishWords(writing) >= targetWords ? ' · Đã đạt mục tiêu hôm nay!' : ''}</p>
                 </div></div>
                 <div class="block"><h3>Đoạn đọc cuối ngày</h3>
                     <div class="row"><p class="reading" id="passage" lang="en">${highlighted}</p>${listen(passage)}</div>
                     <details class="translation"><summary>Xem bản dịch tiếng Việt</summary><p>${escapeHtml(translation)}</p></details>
                     <h3>Học thêm một từ</h3>${learningRow(newWord, newMeaning)}
-                    <p class="note">Từ được tô màu trong đoạn đọc sẽ được ôn lại suốt tuần. Nghe, đọc theo rồi thử kể lại bằng lời của bạn.</p>
+                    <p class="note">Từ được tô màu trong đoạn đọc sẽ được ôn lại trong các bài cùng chủ đề. Nghe, đọc theo rồi thử kể lại bằng lời của bạn.</p>
                 </div>
                 <section class="block review" id="review" aria-labelledby="reviewTitle"></section>
                 <div class="nav">
@@ -625,12 +652,19 @@
                     <button class="btn" id="next" ${current === days.length - 1 ? 'disabled' : ''}>Bài tiếp →</button>
                 </div>`;
             document.querySelectorAll('[data-speech]').forEach(button => button.onclick = () => say(button.dataset.speech, button));
+            document.querySelector('#dailyAnswer').oninput = e => {
+                state.writing = state.writing || {};
+                state.writing[current] = e.target.value;
+                const words = countEnglishWords(e.target.value);
+                document.querySelector('#dailyWordCount').textContent = `${words} / ${targetWords} từ${words >= targetWords ? ' · Đã đạt mục tiêu hôm nay!' : ''}`;
+                localStorage.setItem(KEY, JSON.stringify(state));
+            };
             document.querySelector('#prev').onclick = () => select(current - 1);
             document.querySelector('#next').onclick = () => select(current + 1);
             document.querySelector('#done').onclick = () => { state.done = state.done || {}; state.done[current] = !state.done[current]; persist(); render(); };
             renderList(); progress(); renderReview();
         }
-        function renderList() { document.querySelector("#days").innerHTML = days.map((d, i) => '<button class="day ' + (i === current ? 'active ' : '') + (state.done?.[i] ? 'done' : '') + '" data-i="' + i + '"><span class="num">' + (state.done?.[i] ? '✓' : i + 1) + '</span><span><b>Tuần ' + (d.week + 16) + '</b><small>' + escapeHtml(d.topic) + '</small><small>' + masteryLabel(i) + '</small></span></button>').join(""); document.querySelectorAll(".day").forEach(b => b.onclick = () => select(Number(b.dataset.i))) }
+        function renderList() { document.querySelector("#days").innerHTML = days.map((d, i) => '<button class="day ' + (i === current ? 'active ' : '') + (state.done?.[i] ? 'done' : '') + '" data-i="' + i + '"><span class="num">' + (state.done?.[i] ? '✓' : i + 1) + '</span><span><b>Ngày ' + (i + 1) + '</b><small>' + escapeHtml(d.topic) + '</small><small>' + masteryLabel(i) + '</small></span></button>').join(""); document.querySelectorAll(".day").forEach(b => b.onclick = () => select(Number(b.dataset.i))) }
         function progress() { const n = Object.keys(state.done || {}).filter(k => state.done[k]).length; document.querySelector("#progress").textContent = n + " / " + days.length + " ngày đã học · " + Object.values(state.practice || {}).filter(r => r.completedAt).length + " đã ôn"; document.querySelector("#percent").textContent = Math.round(n / days.length * 100) + "%"; document.querySelector("#fill").style.width = (n / days.length * 100) + "%" }
         function persist() { localStorage.setItem(KEY, JSON.stringify(state)); progress(); renderList(); renderStudyTools() }
         function select(i) { current = Math.max(0, Math.min(days.length - 1, i)); state.current = current; localStorage.setItem(KEY, JSON.stringify(state)); render() }

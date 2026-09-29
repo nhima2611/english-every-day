@@ -1,8 +1,9 @@
 // Daily practice stays on this device, alongside the existing lesson progress.
 function dailyCards(day) {
     const d = days[day];
-    const words = Array.from({ length: 5 }, (_, j) => d.unit.words[(d.di * 2 + j) % d.unit.words.length].split('=').map(s => s.trim()));
-    return [...words, d.phrase.slice(0, 2), readingExtras[d.week].slice(0, 2)].map(([word, meaning], i) => ({ id: `${day}-card-${i}`, word, meaning }));
+    const entries = [...lessonVocabulary(day), d.phrase.slice(0, 2), readingExtras[d.week].slice(0, 2), ...d.unit.phrases.map(p => p.slice(0, 2))];
+    return entries.filter(([word], i) => entries.findIndex(([other]) => other === word) === i)
+        .map(([word, meaning], i) => ({ id: `${day}-card-${i}`, word, meaning }));
 }
 function blankWord(sentence, word) {
     const escaped = word.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
@@ -10,7 +11,7 @@ function blankWord(sentence, word) {
     return pattern.test(sentence) ? sentence.replace(pattern, '____') : null;
 }
 function dailyQuestions(day, round = 0) {
-    const d = days[day], cards = dailyCards(day);
+    const d = days[day], cards = [...lessonVocabulary(day), d.phrase.slice(0, 2), readingExtras[d.week].slice(0, 2)].map(([word, meaning]) => ({ word, meaning }));
     const make = (id, type, prompt, answer, explanation, item = answer) => ({ id: `${day}-${id}`, sourceDay: day, type, prompt, answer, explanation, item });
     const vocabulary = cards.slice(0, 5).map((card, i) => {
         const context = vocabularyContexts[card.word];
@@ -30,7 +31,8 @@ function dailyQuestions(day, round = 0) {
     const questions = [...vocabulary,
         make('phrase', 'blank', phrasePrompt, phraseAnswer, `${example} · ${d.form}`, phrase.word),
         make('extra', 'blank', `${blankWord(extra[2], extra[0])}\nGợi ý: ${extra[1]}`, extra[0], `${extra[2]} · ${extra[0]}: ${extra[1]}. ${extra[3]}`),
-        ...[cards[0], cards[5], cards[6]].map((card, i) => make(`listen-${i}`, 'listen', 'Nghe rồi viết lại từ hoặc cụm từ.', card.word, `${card.word}: ${card.meaning}.`))];
+        ...[cards[0], cards[5], cards[6]].map((card, i) => make(`listen-${i}`, 'listen', 'Nghe rồi viết lại từ hoặc cụm từ.', card.word, `${card.word}: ${card.meaning}.`)),
+        grammarQuestion(day)];
     return questions.slice(round % questions.length).concat(questions.slice(0, round % questions.length));
 }
 function normalizeAnswer(text) {
@@ -45,9 +47,9 @@ function savePractice() { persist(); }
 function startPractice(mode = 'daily') {
     stopSpeech();
     const record = reviewState()[current] || (reviewState()[current] = {});
-    const questions = mode === 'old' ? oldQuestions() : mode === 'due' ? scheduledQuestions().slice(0, 10) : mode === 'retry' ? record.pending || [] : dailyQuestions(current, record.round || 0);
-    if (!questions.length) return;
-    record.session = { mode, phase: mode === 'daily' ? 'cards' : 'quiz', cards: dailyCards(current), cardIndex: 0, flipped: false, cardDirection: (current + (record.round || 0)) % 2, weakCards: [], questions, index: 0, firstCorrect: 0, mistakes: [], resolved: [], attempts: 0, feedback: '', checked: false, revealed: false, draft: '' };
+    const questions = mode === 'cards' ? [] : mode === 'daily' || mode === 'yesterday' ? (current > 0 ? dailyQuestions(current - 1, record.round || 0) : []) : mode === 'old' ? oldQuestions() : mode === 'due' ? scheduledQuestions().slice(0, 10) : mode === 'retry' ? record.pending || [] : dailyQuestions(current, record.round || 0);
+    if (!questions.length && !['daily', 'cards'].includes(mode)) return;
+    record.session = { flowVersion: 2, mode, phase: ['daily', 'cards'].includes(mode) ? 'cards' : 'quiz', cards: dailyCards(current), cardIndex: 0, flipped: false, cardDirection: (current + (record.round || 0)) % 2, weakCards: [], questions, index: 0, firstCorrect: 0, mistakes: [], resolved: [], attempts: 0, feedback: '', checked: false, revealed: false, draft: '' };
     savePractice(); renderReview(true);
 }
 function reviewAudio(label = 'Nghe', slow = false) {
@@ -55,10 +57,13 @@ function reviewAudio(label = 'Nghe', slow = false) {
 }
 function renderReview(focus = false) {
     const host = document.querySelector('#review'); if (!host) return;
-    const record = reviewState()[current] || {}, session = record.session;
-    const intro = `<h3 id="reviewTitle" tabindex="-1">Ôn tập ngày hôm nay</h3><p class="note">7 flashcard · 10 câu luyện tập · khoảng 5–10 phút. Tiến độ được lưu trên trình duyệt này.</p>`;
+    const record = reviewState()[current] || {};
+    if (record.session && record.session.flowVersion !== 2) { record.previousSession = record.session; delete record.session; savePractice(); }
+    const session = record.session;
+    const reviewCount = session?.questions?.length && ['daily', 'yesterday'].includes(session.mode) ? session.questions.length : 11;
+    const intro = `<h3 id="reviewTitle" tabindex="-1">Flashcard hôm nay · Ôn bài hôm trước</h3><p class="note">Ngày ${current + 1}: ${dailyCards(current).length} flashcard gồm đủ từ vựng, cụm từ và từ bổ sung.${current > 0 ? ` Sau đó ôn ${reviewCount} câu của ngày ${current}${reviewCount === 11 ? ', gồm cả ngữ pháp' : ''}.` : ' Đây là bài đầu tiên, chưa có bài hôm trước để ôn.'}</p>`;
     if (!session) {
-        host.innerHTML = intro + (record.completedAt ? `<p><strong>${masteryLabel(current)}</strong> · Kết quả gần nhất: ${record.score}/10 câu đúng lần đầu.</p>` : '') + `<button class="btn primary" data-start="daily">${record.completedAt ? 'Ôn lại từ đầu' : 'Bắt đầu ôn tập'}</button>` + ((record.pending || []).length ? '<button class="btn" data-start="retry">Ôn lại câu sai / từ chưa nhớ</button>' : '') + (scheduledQuestions().length ? `<button class="btn" data-start="due">Ôn đến hạn · ${scheduledQuestions().length} mục</button>` : '') + (oldQuestions().length ? '<button class="btn" data-start="old">Ôn bài cũ</button>' : '');
+        host.innerHTML = intro + (record.completedAt ? `<p><strong>${masteryLabel(current)}</strong> · ${record.reviewedDay !== undefined ? `Ôn ngày ${record.reviewedDay + 1}: ${record.score}/${record.questionCount || 10} câu đúng lần đầu.` : 'Đã học xong flashcard.'}</p>` : '') + `<button class="btn primary" data-start="daily">${record.completedAt ? 'Học lại flashcard và ôn bài trước' : 'Bắt đầu flashcard hôm nay'}</button>` + '<button class="btn" data-start="cards">Chỉ học flashcard hôm nay</button>' + (current > 0 ? `<button class="btn" data-start="yesterday">Ôn bài ngày ${current}</button>` : '') + ((record.pending || []).length ? '<button class="btn" data-start="retry">Ôn lại câu sai / từ chưa nhớ</button>' : '') + (scheduledQuestions().length ? `<button class="btn" data-start="due">Ôn đến hạn · ${scheduledQuestions().length} mục</button>` : '') + (oldQuestions().length ? '<button class="btn" data-start="old">Ôn bài cũ</button>' : '');
     } else if (session.phase === 'cards') {
         const card = session.cards[session.cardIndex];
         host.innerHTML = intro + `<p class="review-step">Flashcard ${session.cardIndex + 1} / ${session.cards.length}</p>
@@ -67,7 +72,7 @@ function renderReview(focus = false) {
             <div class="tools">${session.flipped ? '<button class="btn" data-card="weak">Cần ôn lại</button><button class="btn primary" data-card="known">Đã nhớ</button>' : '<button class="btn primary" id="flipCard">Lật thẻ để xem nghĩa</button>'}</div>`;
     } else if (session.phase === 'quiz') {
         const q = session.questions[session.index];
-        host.innerHTML = intro + `<p class="review-step">${session.mode === 'due' ? 'Ôn đến hạn' : session.mode === 'old' ? 'Ôn bài cũ' : session.mode === 'retry' ? 'Ôn lại câu sai' : 'Luyện tập'} · Câu ${session.index + 1} / ${session.questions.length} · ${q.type === 'listen' ? 'Nghe–viết' : 'Điền chỗ trống'}</p>
+        host.innerHTML = intro + `<p class="review-step">${['daily', 'yesterday'].includes(session.mode) ? `Ôn bài ngày ${current}` : session.mode === 'due' ? 'Ôn đến hạn' : session.mode === 'old' ? 'Ôn bài cũ' : session.mode === 'retry' ? 'Ôn lại câu sai' : 'Luyện tập'} · Câu ${session.index + 1} / ${session.questions.length} · ${q.type === 'listen' ? 'Nghe–viết' : 'Điền chỗ trống'}</p>
             <p class="question">${escapeHtml(q.prompt)}</p>
             ${q.type === 'listen' ? `<div class="tools">${reviewAudio('Nghe đề bài')}${reviewAudio('Nghe chậm', true)}</div><p class="note">${'speechSynthesis' in window ? 'Nếu không nghe được, xem gợi ý nghĩa để tiếp tục.' : 'Thiết bị không hỗ trợ giọng đọc. Dùng gợi ý nghĩa để luyện viết.'}</p><details><summary>Xem gợi ý nghĩa</summary><p>${escapeHtml(q.explanation.slice(q.explanation.indexOf(':') + 1))}</p></details>` : ''}
             <form id="answerForm"><label for="reviewAnswer">Câu trả lời của bạn</label><input id="reviewAnswer" name="answer" type="text" lang="en" autocomplete="off" autocapitalize="none" spellcheck="false" value="${escapeHtml(session.draft)}" ${session.checked ? 'disabled' : ''} aria-describedby="answerHint reviewFeedback"><p id="answerHint" class="note">Không phân biệt chữ hoa, chữ thường; bỏ qua dấu câu cuối câu.</p>
@@ -75,8 +80,8 @@ function renderReview(focus = false) {
             <div class="tools">${session.checked ? `<button type="button" class="btn primary" id="nextQuestion">${session.index + 1 === session.questions.length ? 'Xem kết quả' : 'Câu tiếp theo →'}</button>` : '<button type="submit" class="btn primary">Kiểm tra</button><button type="button" class="btn" id="revealAnswer">Xem đáp án</button>'}</div></form>`;
     } else {
         const missed = session.mistakes.length;
-        host.innerHTML = intro + `<p class="review-score">${session.firstCorrect}<span> / ${session.questions.length}</span></p><p>Câu đúng ngay lần đầu${session.mode === 'daily' ? ' trong lượt này' : ' trong lượt ôn lại'}.</p>
-            <p>${missed ? `${missed} câu cần ôn thêm. Bạn có thể luyện lại ngay bên dưới.` : 'Bạn đã trả lời đúng tất cả ngay lần đầu.'}</p>
+        host.innerHTML = intro + `${session.questions.length ? `<p class="review-score">${session.firstCorrect}<span> / ${session.questions.length}</span></p><p>Câu đúng lần đầu · nội dung ngày ${session.questions[0].sourceDay + 1}.</p>` : '<p>✓ Đã xem hết flashcard của ngày hôm nay.</p>'}
+            <p>${missed ? `${missed} câu cần ôn thêm. Bạn có thể luyện lại ngay bên dưới.` : session.questions.length ? 'Bạn đã trả lời đúng tất cả ngay lần đầu.' : 'Bạn có thể quay lại bộ thẻ bất cứ lúc nào.'}</p>
             ${session.weakCards.length ? `<p><strong>Flashcard cần nhớ:</strong> ${session.weakCards.map(c => escapeHtml(c.word)).join(', ')}</p>` : ''}
             ${missed ? '<details open><summary>Các câu cần ôn</summary><ul>' + session.mistakes.map(q => `<li><strong lang="en">${escapeHtml(q.answer)}</strong> — ${escapeHtml(q.explanation)}</li>`).join('') + '</ul></details>' : ''}
             <div class="tools">${((record.pending || []).length && session.mode !== 'due') ? '<button class="btn" data-start="retry">Ôn lại câu sai / từ chưa nhớ</button>' : ''}<button class="btn primary" id="finishReview">${session.mode === 'daily' ? 'Hoàn thành hôm nay' : 'Lưu kết quả ôn lại'}</button></div>`;
@@ -90,7 +95,7 @@ function renderReview(focus = false) {
     host.querySelectorAll('[data-card]').forEach(b => b.onclick = () => {
         stopSpeech(); if (b.dataset.card === 'weak') session.weakCards.push(session.cards[session.cardIndex]);
         session.cardIndex++; session.flipped = false;
-        if (session.cardIndex === session.cards.length) session.phase = 'quiz';
+        if (session.cardIndex === session.cards.length) { if (session.questions.length) session.phase = 'quiz'; else completePractice(); }
         savePractice(); renderReview(true);
     });
     const input = host.querySelector('#reviewAnswer'); if (input) input.oninput = e => { session.draft = e.target.value; savePractice(); };
@@ -131,19 +136,20 @@ function completePractice() {
     const record = reviewState()[current], session = record.session;
     session.phase = 'result';
     const weak = session.weakCards.map(card => ({ id: card.id, sourceDay: current, type: 'blank', prompt: `Nhớ lại từ / cụm từ: ${card.meaning} → ____`, answer: card.word, explanation: `${card.word}: ${card.meaning}.` }));
-    if (session.mode === 'daily') {
-        record.completedAt = new Date().toISOString(); record.score = session.firstCorrect; record.round = (record.round || 0) + 1;
+    if (['daily', 'cards', 'yesterday'].includes(session.mode)) {
+        record.completedAt = new Date().toISOString(); record.score = session.firstCorrect; record.questionCount = session.questions.length;
+        if (session.questions.length) record.reviewedDay = session.questions[0].sourceDay; record.round = (record.round || 0) + 1;
         state.done = state.done || {}; state.done[current] = true;
         document.querySelector('#done').textContent = '✓ Đã học';
-        record.pending = [...session.mistakes, ...weak];
+        const retained = (record.pending || []).filter(q => !session.questions.some(item => item.id === q.id) && !session.cards.some(card => card.id === q.id));
+        record.pending = [...retained, ...session.mistakes, ...weak];
         weak.forEach(q => scheduleAnswer(q, false));
     } else {
         // Remove only answers correct on the first attempt of this retry; errors remain due.
         const missed = new Set(session.mistakes.map(q => q.id));
         for (const q of session.questions) {
             if (!missed.has(q.id)) {
-                const source = reviewState()[q.sourceDay];
-                if (source) source.pending = (source.pending || []).filter(item => item.id !== q.id);
+                for (const source of Object.values(reviewState())) source.pending = (source.pending || []).filter(item => item.id !== q.id);
             }
         }
     }

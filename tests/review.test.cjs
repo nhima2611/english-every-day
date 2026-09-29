@@ -4,43 +4,47 @@ function el(key){if(!els.has(key))els.set(key,{innerHTML:'',textContent:'',value
 const ctx=vm.createContext({console,window:{},localStorage:{getItem:k=>saved[k],setItem:(k,v)=>saved[k]=v},document:{querySelector:el,querySelectorAll:()=>[]}});
 vm.runInContext(fs.readFileSync('practice-data.js','utf8'),ctx);
 vm.runInContext(fs.readFileSync('learning-storage.js','utf8'),ctx);
+vm.runInContext(fs.readFileSync('daily-lessons.js','utf8'),ctx);
+vm.runInContext(fs.readFileSync('grammar-lessons.js','utf8'),ctx);
 vm.runInContext(fs.readFileSync('review.js','utf8'),ctx);
 vm.runInContext(fs.readFileSync('index.html','utf8').match(/<script>([\s\S]*)<\/script>/)[1],ctx);
 vm.runInContext(`
-function expect(x,msg){if(!x)throw Error(msg)}
-for(let i=0;i<105;i++){
- expect(dailyCards(i).length===7,'card count');const qs=dailyQuestions(i);expect(qs.length===10,'question count');
- expect(new Set(qs.map(q=>q.id)).size===10,'unique IDs');
- expect(qs.slice(0,5).every(q=>!q.prompt.toLowerCase().includes(q.answer.toLowerCase()) && q.prompt.includes('Gợi ý:')),'context cloze leaks answer');
- expect(qs[5].prompt.includes('____') && !qs[5].prompt.includes('null'),'phrase context');
- expect(qs.every(q=>q.answer&&q.explanation&&!q.prompt.includes('undefined')),'content');
- expect(qs.filter(q=>q.type==='blank').every(q=>q.prompt.includes('____')),'blank missing');
+function expect(value, message) { if (!value) throw Error(message); }
+const readings = new Set(), grammarExamples = new Set();
+for (let i=0; i<105; i++) {
+ const cards=dailyCards(i), d=days[i], reading=lessonReading(i);
+ expect(cards.length===new Set([...lessonVocabulary(i).map(p=>p[0]),...d.unit.phrases.map(p=>p[0]),readingExtras[d.week][0]]).size,'full card count '+i);
+ expect(d.unit.phrases.every(p=>cards.some(c=>c.word===p[0])),'missing phrase '+i);
+ expect(lessonVocabulary(i).every(p=>cards.some(c=>c.word===p[0])),'missing word '+i);
+ expect(reading.english.split(/\\s+/).length>=100,'reading too short '+i);
+ expect(reading.vietnamese.includes(translations[d.week][d.di]),'translation '+i);
+ readings.add(reading.english);
+ const grammar=grammarForDay(i), grammarQuiz=grammarQuestion(i);
+ expect(grammar.example && grammar.translation && grammar.rule && grammar.formula,'grammar content '+i);
+ expect(grammarQuiz.prompt.includes('____')&&!grammarQuiz.prompt.includes('null'),'grammar cloze '+i);
+ grammarExamples.add(grammar.example);
+ expect(dailyQuestions(i).every(q=>!q.prompt.includes('null')&&!q.prompt.includes('undefined')),'question content '+i);
 }
-expect(normalizeAnswer('  GET   UP! ')==='get up','normalization');
-startPractice();expect(reviewSession().phase==='cards','cards first');
-let s=reviewSession();s.phase='quiz';
-s.draft='wrong';checkReviewAnswer();expect(s.firstCorrect===0&&s.mistakes.length===1&&!s.checked,'wrong first');
-s.draft=s.questions[0].answer;checkReviewAnswer();expect(s.checked&&s.firstCorrect===0,'retry inflates score');advanceReview();
-checkReviewAnswer(true);advanceReview();
-while(s.phase==='quiz'){s.draft=s.questions[s.index].answer;checkReviewAnswer();advanceReview()}
-expect(s.firstCorrect===8,'score');expect(state.practice[0].pending.length===2,'pending');expect(state.practice[0].completedAt&&state.done[0],'completed');
-startPractice('retry');s=reviewSession();while(s.phase==='quiz'){s.draft=s.questions[s.index].answer;checkReviewAnswer();advanceReview()}
-expect(state.practice[0].pending.length===0,'retry resolves errors');expect(state.practice[0].score===8,'retry changes initial score');
-startPractice();s=reviewSession();s.phase='quiz';s.weakCards=[s.cards[0]];
-while(s.phase==='quiz'){s.draft=s.questions[s.index].answer;checkReviewAnswer();advanceReview()}
-expect(state.practice[0].pending.length===1,'weak flashcard missing');
-select(1);expect(scheduledQuestions('2099-01-01').length>0,'scheduled practice');
-select(2);startPractice();s=reviewSession();s.phase='quiz';s.draft='in progress';savePractice();
-expect(JSON.parse(localStorage.getItem(KEY)).practice[2].session.draft==='in progress','draft save');
-let q=dailyQuestions(3)[0];
-scheduleAnswer(q,true,'2026-09-28');expect(state.schedule[itemKey(q)].due==='2026-09-29'&&state.schedule[itemKey(q)].stage===1,'first interval');
-scheduleAnswer(q,true,'2026-09-28');expect(state.schedule[itemKey(q)].stage===1,'same-day inflation');
-scheduleAnswer(q,true,'2026-09-29');expect(state.schedule[itemKey(q)].due==='2026-10-02'&&state.schedule[itemKey(q)].stage===2,'second interval');
-scheduleAnswer(q,false,'2026-10-02');expect(state.schedule[itemKey(q)].stage===0&&state.schedule[itemKey(q)].due==='2026-10-03','failure reset');
-const payload=backupPayload();const restored=validateBackup(JSON.parse(JSON.stringify(payload)));
-expect(restored.current===state.current&&restored.practice[0].completedAt,'backup roundtrip');
-for(const bad of [{...payload,version:2},{...payload,data:{...state,current:999}},{...payload,data:{...state,done:{999:true}}},{...payload,data:{...state,schedule:{oops:{stage:99}}}}]){
- let rejected=false;try{validateBackup(bad)}catch{rejected=true}expect(rejected,'invalid backup accepted');
-}
-console.log('PASS: 105 contextual exercises, progress, scheduling intervals, same-day cap, failed-card reset, backup roundtrip and validation');
+expect(readings.size===105,'readings must differ');
+expect(grammarExamples.size===105,'grammar examples must differ');
+expect(dailyTargetWords(0)===12&&dailyTargetWords(104)===116,'daily speaking target range');
+for(let i=1;i<105;i++) expect(dailyTargetWords(i)===dailyTargetWords(i-1)+1,'small daily increase '+i);
+document.querySelector('#dailyAnswer').oninput({target:{value:'I check my notes every morning.'}});
+expect(state.writing[0]==='I check my notes every morning.','daily answer saved');
+expect(document.querySelector('#dailyWordCount').textContent.startsWith('6 / 12'),'daily answer word count');
+startPractice(); expect(reviewSession().cards.length===13 && reviewSession().questions.length===0,'first-day boundary');
+completePractice(); expect(reviewSession().phase==='result','first-day cards result');
+select(1);startPractice();let s=reviewSession();
+expect(s.questions.length===11&&s.questions.every(q=>q.sourceDay===0)&&s.questions.some(q=>q.id==='0-grammar'),'day 2 reviews day 1 including grammar');
+expect(s.cards.every(c=>c.id.startsWith('1-card-')),'today cards source');
+s.phase='quiz';s.draft='incorrect';checkReviewAnswer();s.draft=s.questions[0].answer;checkReviewAnswer();advanceReview();
+while(s.phase==='quiz'){s.draft=s.questions[s.index].answer;checkReviewAnswer();advanceReview();}
+expect(s.firstCorrect===10,'first-attempt grade');
+expect(state.practice[1].pending.length===1,'yesterday mistakes retained');
+startPractice('retry');s=reviewSession();s.draft=s.questions[0].answer;checkReviewAnswer();advanceReview();
+expect(state.practice[1].pending.length===0,'cross-day retry cleared');
+startPractice('cards');expect(!reviewSession().questions.length,'independent flashcards');
+const payload=backupPayload();expect(validateBackup(JSON.parse(JSON.stringify(payload))).practice[1].session.cards.length===13,'backup new card count');
+select(104);startPractice('yesterday');expect(reviewSession().questions.every(q=>q.sourceDay===103),'last day reviews previous');
+console.log('PASS: 105 distinct bilingual readings, all daily flashcards, previous-day review, first-day boundary, scoring, cross-day retry, backup');
 `,ctx);

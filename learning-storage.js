@@ -63,17 +63,19 @@ function validateBackup(payload) {
     if (data.done !== undefined && (!object(data.done) || Object.entries(data.done).some(([k, v]) => !day(k) || typeof v !== 'boolean'))) fail();
     if (data.rate !== undefined && (typeof data.rate !== 'number' || data.rate < .65 || data.rate > 1.1)) fail();
     if (data.voice !== undefined && data.voice !== null && !text(data.voice)) fail();
+    if (data.writing !== undefined && (!object(data.writing) || Object.entries(data.writing).some(([k, v]) => !day(k) || typeof v !== 'string' || v.length > 2000))) fail();
     if (data.practice !== undefined) {
         if (!object(data.practice)) fail();
         for (const [key, r] of Object.entries(data.practice)) {
             if (!day(key) || !object(r) || (r.pending !== undefined && !questions(r.pending))) fail();
             if (r.completedAt !== undefined && (!text(r.completedAt) || Number.isNaN(Date.parse(r.completedAt)))) fail();
-            if (r.score !== undefined && (!Number.isInteger(r.score) || r.score < 0 || r.score > 10)) fail();
+            if (r.score !== undefined && (!Number.isInteger(r.score) || r.score < 0 || r.score > 11)) fail();
+            if (r.questionCount !== undefined && (!Number.isInteger(r.questionCount) || r.questionCount < 0 || r.questionCount > 11)) fail();
             if (r.round !== undefined && (!Number.isInteger(r.round) || r.round < 0 || r.round > 100000)) fail();
             if (r.session) {
                 const s = r.session;
-                if (!['daily', 'retry', 'old', 'due'].includes(s.mode) || !['cards', 'quiz', 'result'].includes(s.phase) || !questions(s.questions) || !s.questions.length || !questions(s.mistakes) || !Array.isArray(s.cards) || s.cards.length !== 7 || !s.cards.every(card) || !Array.isArray(s.weakCards) || s.weakCards.length > 7 || !s.weakCards.every(card)) fail();
-                if (!Number.isInteger(s.index) || s.index < 0 || s.index > s.questions.length || (s.phase === 'quiz' && s.index === s.questions.length) || !Number.isInteger(s.cardIndex) || s.cardIndex < 0 || s.cardIndex > 7 || (s.phase === 'cards' && s.cardIndex === 7)) fail();
+                if (!['daily', 'retry', 'old', 'due', 'cards', 'yesterday'].includes(s.mode) || !['cards', 'quiz', 'result'].includes(s.phase) || !questions(s.questions) || !questions(s.mistakes) || !Array.isArray(s.cards) || (s.cards.length < 7 || s.cards.length > 20) || !s.cards.every(card) || !Array.isArray(s.weakCards) || s.weakCards.length > s.cards.length || !s.weakCards.every(card)) fail();
+                if (!Number.isInteger(s.index) || s.index < 0 || s.index > s.questions.length || (s.phase === 'quiz' && s.index === s.questions.length) || !Number.isInteger(s.cardIndex) || s.cardIndex < 0 || s.cardIndex > s.cards.length || (s.phase === 'cards' && s.cardIndex === s.cards.length)) fail();
                 if (!text(s.draft) || !text(s.feedback) || !Number.isInteger(s.firstCorrect) || s.firstCorrect < 0 || s.firstCorrect > s.questions.length || !Number.isInteger(s.attempts) || s.attempts < 0 || !Array.isArray(s.resolved) || !s.resolved.every(text)) fail();
                 if (![s.flipped, s.checked, s.revealed].every(v => typeof v === 'boolean')) fail();
             }
